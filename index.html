@@ -1,0 +1,801 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IronEye · Tamizaje de anemia sin agujas</title>
+<meta name="description" content="IronEye: dispositivo no invasivo con IA para el tamizaje de anemia infantil en el primer nivel de atención. Sin agujas, sin miedo, con resultados.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0E2433;        /* azul profundo institucional */
+  --ink-2:#34505F;
+  --muted:#6B7F8A;
+  --teal:#1F7A80;       /* verde azulado del pitch: salud, confianza */
+  --teal-soft:#E3F1F0;
+  --sun:#F2B418;        /* amarillo jirafa: calidez, niñez */
+  --sun-soft:#FFF4D6;
+  --brown:#8A5A2B;      /* manchas de la jirafa */
+  --cream:#FBF8F2;
+  --paper:#FFFFFF;
+  --line:#E7E1D6;
+  --radius:18px;
+  --shadow:0 18px 40px -22px rgba(14,36,51,.35);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--cream);color:var(--ink);font-family:Manrope,system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3{font-family:Fraunces,Georgia,serif;font-weight:600;line-height:1.12;margin:0;letter-spacing:-.01em}
+h2{font-size:clamp(1.9rem,3.6vw,2.8rem)}
+h3{font-size:1.2rem}
+p{margin:0}
+.wrap{max-width:1180px;margin:0 auto;padding:0 24px}
+section{padding:96px 0}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--teal)}
+.eyebrow::before{content:"";width:22px;height:2px;background:var(--sun)}
+.lead{font-size:1.1rem;color:var(--ink-2);max-width:640px}
+.sec-head{display:grid;gap:14px;margin-bottom:48px}
+.sec-head.center{text-align:center;justify-items:center}
+.btn{display:inline-flex;align-items:center;gap:10px;padding:14px 24px;border-radius:999px;font-weight:700;text-decoration:none;border:0;cursor:pointer;font:inherit;font-weight:700;transition:transform .15s ease, box-shadow .15s ease}
+.btn:hover{transform:translateY(-2px)}
+.btn-primary{background:var(--ink);color:#fff;box-shadow:0 10px 24px -12px rgba(14,36,51,.7)}
+.btn-sun{background:var(--sun);color:var(--ink)}
+.btn-ghost{background:transparent;color:var(--ink);border:1.5px solid var(--ink)}
+.tag{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;padding:4px 10px;border-radius:999px;background:var(--sun-soft);color:var(--brown)}
+.note{font-size:.78rem;color:var(--muted)}
+
+/* ---------- NAV ---------- */
+.nav{position:sticky;top:0;z-index:50;background:rgba(251,248,242,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:72px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;font-family:Fraunces,serif;font-weight:700;font-size:1.35rem;text-decoration:none}
+.logo b{color:var(--teal);font-weight:700}
+.nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0;font-size:.92rem;font-weight:600}
+.nav ul a{text-decoration:none;color:var(--ink-2)}
+.nav ul a:hover{color:var(--teal)}
+.nav .btn{padding:10px 18px;font-size:.9rem}
+@media (max-width:960px){.nav ul{display:none}}
+
+/* ---------- HERO ---------- */
+.hero{padding:64px 0 88px;position:relative;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
+.hero h1{font-size:clamp(2.5rem,5.4vw,4.3rem)}
+.hero h1 em{font-style:italic;color:var(--teal)}
+.hero .lead{margin:22px 0 32px}
+.hero-cta{display:flex;flex-wrap:wrap;gap:12px}
+.hero-proof{display:flex;gap:28px;margin-top:40px;flex-wrap:wrap}
+.hero-proof div{border-left:3px solid var(--sun);padding-left:12px}
+.hero-proof strong{display:block;font-family:Fraunces,serif;font-size:1.7rem;line-height:1}
+.hero-proof span{font-size:.82rem;color:var(--muted)}
+.hero-art{position:relative;aspect-ratio:1/1;max-width:520px;justify-self:center;width:100%}
+.hero-art .disc{position:absolute;inset:6%;border-radius:50%;background:radial-gradient(circle at 35% 30%,#FFE8A3 0%,var(--sun-soft) 55%,transparent 72%)}
+.hero-art .ring{position:absolute;inset:0;border-radius:50%;border:1.5px dashed rgba(31,122,128,.35);animation:spin 60s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hero-art img{position:absolute;inset:10% 14%;width:72%;height:80%;object-fit:contain;mix-blend-mode:multiply;filter:drop-shadow(0 30px 30px rgba(138,90,43,.25))}
+.float{position:absolute;background:var(--paper);border-radius:14px;padding:12px 14px;box-shadow:var(--shadow);font-size:.82rem;display:flex;gap:10px;align-items:center;line-height:1.3}
+.float b{display:block;font-size:.95rem}
+.float .ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:none}
+.f1{top:12%;left:-4%}
+.f2{bottom:14%;right:-2%}
+.f3{bottom:2%;left:8%}
+@media (max-width:900px){.hero .wrap{grid-template-columns:1fr}.f1{left:0}.f2{right:0}}
+
+/* ---------- STRIP: PROBLEMA ---------- */
+.problem{background:var(--ink);color:#fff;padding:80px 0}
+.problem .wrap{display:grid;grid-template-columns:1fr 1.2fr;gap:56px;align-items:center}
+.problem h2{color:#fff}
+.problem .lead{color:#C6D5DC;margin-top:16px}
+.problem .eyebrow{color:var(--sun)}
+.pstats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.pstat{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:var(--radius);padding:22px}
+.pstat strong{font-family:Fraunces,serif;font-size:2.3rem;color:var(--sun);display:block;line-height:1.1}
+.pstat span{font-size:.88rem;color:#C6D5DC}
+.pain{grid-column:1/-1;display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:6px}
+.pain div{font-size:.82rem;color:#E4ECEF;border-top:2px solid rgba(242,180,24,.6);padding-top:10px}
+@media (max-width:900px){.problem .wrap{grid-template-columns:1fr}.pstats{grid-template-columns:1fr 1fr}.pain{grid-template-columns:1fr 1fr}}
+
+/* ---------- SERVICIOS ---------- */
+.shop{display:grid;grid-template-columns:1.1fr 1fr;gap:28px;align-items:stretch;margin-bottom:28px}
+.product{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:28px;display:grid;grid-template-columns:.9fr 1.1fr;gap:24px;box-shadow:var(--shadow)}
+.product .pic{background:var(--sun-soft);border-radius:18px;display:grid;place-items:center;padding:18px}
+.product .pic img{mix-blend-mode:multiply;max-height:260px;object-fit:contain}
+.product h3{font-size:1.6rem;margin:10px 0 6px}
+.price{display:flex;align-items:baseline;gap:8px;margin:14px 0}
+.price strong{font-family:Fraunces,serif;font-size:2.4rem}
+.price span{color:var(--muted);font-size:.9rem}
+.checks{list-style:none;padding:0;margin:0 0 20px;display:grid;gap:6px;font-size:.92rem}
+.checks li{display:flex;gap:8px}
+.checks li::before{content:"";flex:none;width:18px;height:18px;margin-top:3px;border-radius:50%;background:var(--teal-soft) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231F7A80' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E") center/11px no-repeat}
+.plan{background:var(--teal);color:#fff;border-radius:24px;padding:28px;display:flex;flex-direction:column;gap:14px;position:relative;overflow:hidden}
+.plan::after{content:"";position:absolute;right:-60px;bottom:-60px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.08)}
+.plan h3{font-size:1.6rem;color:#fff}
+.plan .checks li::before{background-color:rgba(255,255,255,.18);background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23F2B418' stroke-width='3.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5 9-10'/%3E%3C/svg%3E")}
+.plan .tag{background:rgba(242,180,24,.2);color:var(--sun);align-self:flex-start}
+.plan .btn{align-self:flex-start;margin-top:auto}
+.services{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.svc{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:24px;transition:transform .2s, box-shadow .2s}
+.svc:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.svc .ic{width:46px;height:46px;border-radius:14px;background:var(--sun-soft);display:grid;place-items:center;margin-bottom:16px}
+.svc h3{margin-bottom:8px;font-size:1.08rem}
+.svc p{font-size:.9rem;color:var(--ink-2)}
+@media (max-width:980px){.shop{grid-template-columns:1fr}.services{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.product{grid-template-columns:1fr}.services{grid-template-columns:1fr}}
+
+/* ---------- CÓMO FUNCIONA ---------- */
+.how{background:var(--paper);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;counter-reset:s;position:relative}
+.step{padding:0 22px;position:relative}
+.step:not(:last-child)::after{content:"";position:absolute;top:26px;right:-10px;width:20px;height:2px;background:var(--sun)}
+.step .n{width:52px;height:52px;border-radius:50%;border:2px solid var(--teal);display:grid;place-items:center;font-family:Fraunces,serif;font-size:1.3rem;font-weight:700;color:var(--teal);margin-bottom:18px;background:var(--paper)}
+.step h3{margin-bottom:8px}
+.step p{font-size:.92rem;color:var(--ink-2)}
+.use{display:grid;grid-template-columns:.8fr 1.2fr;gap:44px;align-items:center;margin-top:72px}
+.use img{border-radius:24px;aspect-ratio:4/5;object-fit:cover;box-shadow:var(--shadow)}
+.quote{font-family:Fraunces,serif;font-size:clamp(1.5rem,2.6vw,2.1rem);line-height:1.3}
+.quote em{color:var(--teal)}
+@media (max-width:900px){.steps{grid-template-columns:1fr 1fr;row-gap:36px}.step::after{display:none}.use{grid-template-columns:1fr}}
+
+/* ---------- PROPUESTA DE VALOR ---------- */
+.vp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-bottom:56px}
+.vp{border-radius:var(--radius);padding:26px;background:var(--paper);border:1px solid var(--line)}
+.vp.hl{background:var(--sun);border-color:var(--sun)}
+.vp .k{font-family:Fraunces,serif;font-size:2.2rem;font-weight:700;line-height:1;margin-bottom:10px}
+.vp p{font-size:.92rem;color:var(--ink-2)}
+.vp.hl p{color:var(--ink)}
+table.cmp{width:100%;border-collapse:separate;border-spacing:0;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;font-size:.93rem}
+.cmp th,.cmp td{padding:15px 18px;text-align:left;border-bottom:1px solid var(--line)}
+.cmp tr:last-child td{border-bottom:0}
+.cmp thead th{background:var(--ink);color:#fff;font-weight:700;font-size:.85rem;letter-spacing:.04em}
+.cmp thead th.us{background:var(--teal)}
+.cmp td.us{background:var(--teal-soft);font-weight:700;color:var(--teal)}
+.cmp td:first-child{font-weight:600}
+.table-scroll{overflow-x:auto}
+@media (max-width:900px){.vp-grid{grid-template-columns:1fr}}
+
+/* ---------- CALCULADORA ---------- */
+.calc{margin-top:28px;display:grid;grid-template-columns:1.2fr 1fr;gap:0;border-radius:24px;overflow:hidden;box-shadow:var(--shadow)}
+.calc .in{background:var(--paper);padding:30px;border:1px solid var(--line);border-right:0;border-radius:24px 0 0 24px}
+.calc .out{background:var(--ink);color:#fff;padding:30px;display:flex;flex-direction:column;justify-content:center;gap:6px}
+.calc label{font-weight:700;display:block;margin:10px 0 6px}
+.calc input[type=range]{width:100%;accent-color:var(--teal)}
+.calc .val{font-family:Fraunces,serif;font-size:1.5rem}
+.calc .big{font-family:Fraunces,serif;font-size:clamp(2.2rem,4vw,3rem);color:var(--sun);line-height:1}
+.calc .out span{color:#C6D5DC;font-size:.88rem}
+@media (max-width:800px){.calc{grid-template-columns:1fr}.calc .in{border-right:1px solid var(--line);border-radius:24px 24px 0 0}}
+
+/* ---------- IMPACTO ---------- */
+.impact{background:var(--teal-soft)}
+.icards{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:56px}
+.icard{background:var(--paper);border-radius:var(--radius);padding:24px;border-top:4px solid var(--c)}
+.icard h3{font-size:1.02rem;margin:14px 0 8px}
+.icard p{font-size:.88rem;color:var(--ink-2)}
+.timeline{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.tl{background:var(--paper);border-radius:var(--radius);padding:26px;position:relative}
+.tl .yr{font-size:.78rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;color:var(--teal)}
+.tl strong{display:block;font-family:Fraunces,serif;font-size:2rem;margin:8px 0 2px}
+.tl ul{margin:10px 0 0;padding-left:18px;font-size:.9rem;color:var(--ink-2)}
+.bar{height:6px;border-radius:6px;background:var(--line);margin-top:16px;overflow:hidden}
+.bar i{display:block;height:100%;background:linear-gradient(90deg,var(--teal),var(--sun))}
+@media (max-width:900px){.icards{grid-template-columns:1fr 1fr}.timeline{grid-template-columns:1fr}}
+
+/* ---------- MARKETING DIGITAL ---------- */
+.funnel{display:grid;gap:14px}
+.fstage{display:grid;grid-template-columns:200px 1fr;gap:24px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:22px 26px;margin:0 auto;width:100%}
+.fstage:nth-child(2){width:92%}
+.fstage:nth-child(3){width:84%}
+.fstage:nth-child(4){width:76%}
+.fstage .lbl b{display:block;font-family:Fraunces,serif;font-size:1.4rem}
+.fstage .lbl span{font-size:.8rem;color:var(--muted);font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font-size:.84rem;padding:7px 12px;border-radius:999px;background:var(--cream);border:1px solid var(--line);font-weight:600}
+.chip.ai{background:var(--ink);color:#fff;border-color:var(--ink)}
+.chip.ai::before{content:"✦ ";color:var(--sun)}
+@media (max-width:800px){.fstage,.fstage:nth-child(n){width:100%;grid-template-columns:1fr;gap:10px}}
+.mk-two{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:40px}
+.panel{background:var(--paper);border:1px solid var(--line);border-radius:24px;padding:30px}
+.panel h3{font-size:1.35rem;margin-bottom:6px}
+.panel>p{color:var(--ink-2);font-size:.93rem;margin-bottom:18px}
+.swatches{display:flex;gap:10px;margin:14px 0 18px}
+.sw{flex:1;border-radius:12px;height:70px;padding:8px;font-size:.7rem;font-weight:700;display:flex;align-items:flex-end}
+.type-demo{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.type-demo div{border:1px solid var(--line);border-radius:12px;padding:12px}
+.type-demo .a{font-family:Fraunces,serif;font-size:1.6rem;line-height:1}
+.type-demo .b{font-family:Manrope,sans-serif;font-size:1.6rem;line-height:1;font-weight:700}
+.type-demo small{display:block;color:var(--muted);font-size:.75rem;margin-top:6px}
+.ai-list{display:grid;gap:12px}
+.ai-item{display:grid;grid-template-columns:40px 1fr;gap:12px;align-items:start}
+.ai-item .ic{width:40px;height:40px;border-radius:12px;background:var(--ink);display:grid;place-items:center}
+.ai-item b{display:block;font-size:.95rem}
+.ai-item span{font-size:.86rem;color:var(--ink-2)}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-top:22px}
+.kpi{background:var(--cream);border-radius:14px;padding:16px;border:1px solid var(--line)}
+.kpi b{font-family:Fraunces,serif;font-size:1.35rem;display:block}
+.kpi span{font-size:.8rem;color:var(--muted)}
+.campaigns{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:22px}
+.camp{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:24px}
+.camp .when{font-size:.75rem;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--teal)}
+.camp h3{margin:8px 0 8px;font-size:1.12rem}
+.camp p{font-size:.88rem;color:var(--ink-2)}
+.camp .cost{margin-top:14px;font-weight:800}
+@media (max-width:900px){.mk-two{grid-template-columns:1fr}.kpis{grid-template-columns:1fr 1fr}.campaigns{grid-template-columns:1fr}}
+
+/* ---------- VALIENTE ---------- */
+.brave{background:var(--sun);padding:80px 0;overflow:hidden}
+.brave .wrap{display:grid;grid-template-columns:1.1fr .9fr;gap:40px;align-items:center}
+.brave h2{font-size:clamp(2rem,4vw,3.2rem)}
+.brave p{margin-top:14px;font-size:1.05rem;max-width:560px}
+.cert{background:var(--paper);border-radius:22px;padding:26px;transform:rotate(-2.5deg);box-shadow:0 30px 50px -25px rgba(138,90,43,.6);border:3px dashed var(--brown);text-align:center}
+.cert .t{font-family:Fraunces,serif;font-size:1.7rem;font-weight:700;color:var(--brown)}
+.cert .name{border-bottom:2px solid var(--line);margin:18px 20px 6px;padding-bottom:6px;font-family:Fraunces,serif;font-style:italic;font-size:1.3rem;color:var(--muted)}
+.medal{width:78px;height:78px;margin:0 auto 10px;border-radius:50%;background:var(--sun);display:grid;place-items:center;box-shadow:inset 0 0 0 6px #FFE08A}
+@media (max-width:900px){.brave .wrap{grid-template-columns:1fr}}
+
+/* ---------- TESTIMONIOS ---------- */
+.tests{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.test{background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:26px;display:flex;flex-direction:column;gap:18px}
+.test p{font-family:Fraunces,serif;font-size:1.1rem;line-height:1.45}
+.who{display:flex;gap:12px;align-items:center;margin-top:auto}
+.av{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff}
+.who b{display:block;font-size:.92rem}
+.who span{font-size:.8rem;color:var(--muted)}
+@media (max-width:900px){.tests{grid-template-columns:1fr}}
+
+/* ---------- TUTORIALES + NORMATIVA ---------- */
+.two-col{display:grid;grid-template-columns:1.15fr .85fr;gap:28px}
+.vids{display:grid;gap:14px}
+.vid{display:grid;grid-template-columns:150px 1fr;gap:16px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:var(--radius);padding:12px;text-decoration:none}
+.thumb{aspect-ratio:16/10;border-radius:12px;background:linear-gradient(135deg,var(--teal),var(--ink));display:grid;place-items:center;position:relative}
+.thumb .dur{position:absolute;right:6px;bottom:6px;font-size:.7rem;color:#fff;background:rgba(0,0,0,.45);padding:1px 6px;border-radius:6px}
+.play{width:38px;height:38px;border-radius:50%;background:var(--sun);display:grid;place-items:center}
+.vid b{display:block}
+.vid span{font-size:.84rem;color:var(--muted)}
+.norms{background:var(--ink);color:#fff;border-radius:24px;padding:30px}
+.norms h3{color:#fff;font-size:1.35rem;margin-bottom:18px}
+.norm{display:grid;grid-template-columns:30px 1fr;gap:12px;padding:14px 0;border-top:1px solid rgba(255,255,255,.12)}
+.norm b{display:block;font-size:.95rem}
+.norm span{font-size:.84rem;color:#C6D5DC}
+.status{display:inline-block;margin-top:6px;font-size:.7rem;font-weight:800;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px;background:rgba(242,180,24,.2);color:var(--sun)}
+.status.ok{background:rgba(120,210,190,.18);color:#8FE0CD}
+@media (max-width:900px){.two-col{grid-template-columns:1fr}.vid{grid-template-columns:110px 1fr}}
+
+/* ---------- FAQ ---------- */
+.faq{max-width:820px;margin:0 auto;display:grid;gap:10px}
+details{background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:18px 22px}
+summary{cursor:pointer;font-weight:700;list-style:none;display:flex;justify-content:space-between;gap:16px}
+summary::-webkit-details-marker{display:none}
+summary::after{content:"+";font-size:1.4rem;line-height:1;color:var(--teal)}
+details[open] summary::after{content:"–"}
+details p{margin-top:12px;color:var(--ink-2);font-size:.94rem}
+
+/* ---------- CONTACTO ---------- */
+.contact{background:var(--ink);color:#fff}
+.contact .wrap{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start}
+.contact h2{color:#fff}
+.contact .lead{color:#C6D5DC;margin:16px 0 28px}
+.contact .eyebrow{color:var(--sun)}
+.ch{display:grid;gap:12px}
+.ch a{display:flex;gap:14px;align-items:center;text-decoration:none;padding:14px 16px;border-radius:14px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1)}
+.ch a small{display:block;color:#9FB4BE;font-size:.8rem}
+form{background:var(--paper);color:var(--ink);border-radius:24px;padding:30px;display:grid;gap:14px}
+form h3{font-size:1.4rem}
+.fr{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+form label{font-size:.8rem;font-weight:700;display:grid;gap:6px}
+form input,form select,form textarea{font:inherit;font-size:.95rem;padding:12px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--cream);color:var(--ink)}
+form input:focus,form select:focus,form textarea:focus{outline:none;border-color:var(--teal)}
+.ok-msg{display:none;background:var(--teal-soft);color:var(--teal);font-weight:700;padding:12px 14px;border-radius:12px}
+@media (max-width:900px){.contact .wrap{grid-template-columns:1fr}.fr{grid-template-columns:1fr}}
+
+footer{background:#081823;color:#9FB4BE;padding:48px 0 32px;font-size:.88rem}
+footer .wrap{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:28px}
+footer h4{color:#fff;font-size:.85rem;letter-spacing:.08em;text-transform:uppercase;margin:0 0 12px}
+footer ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+footer a{text-decoration:none}
+footer .logo{color:#fff;margin-bottom:10px}
+.legal{grid-column:1/-1;border-top:1px solid rgba(255,255,255,.1);padding-top:20px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:10px;font-size:.8rem}
+@media (max-width:800px){footer .wrap{grid-template-columns:1fr 1fr}}
+
+/* ---------- FLOTANTES ---------- */
+.wa{position:fixed;right:22px;bottom:22px;z-index:60;width:58px;height:58px;border-radius:50%;background:#25D366;display:grid;place-items:center;box-shadow:0 12px 26px -8px rgba(0,0,0,.4)}
+.bot{position:fixed;right:92px;bottom:28px;z-index:60;background:var(--paper);border:1px solid var(--line);border-radius:999px;padding:10px 16px 10px 10px;display:flex;gap:10px;align-items:center;box-shadow:var(--shadow);font-size:.85rem;font-weight:700;cursor:pointer}
+.bot .dot{width:30px;height:30px;border-radius:50%;background:var(--sun);display:grid;place-items:center}
+.botwin{position:fixed;right:22px;bottom:96px;z-index:61;width:min(340px,calc(100vw - 32px));background:var(--paper);border-radius:20px;box-shadow:0 30px 60px -20px rgba(14,36,51,.5);overflow:hidden;display:none}
+.botwin.open{display:block}
+.botwin header{background:var(--ink);color:#fff;padding:14px 16px;display:flex;justify-content:space-between;align-items:center}
+.botwin header small{display:block;color:#9FB4BE;font-weight:500}
+.botwin .msgs{padding:16px;display:grid;gap:10px;max-height:300px;overflow:auto;font-size:.88rem}
+.m{padding:10px 12px;border-radius:14px;max-width:85%}
+.m.b{background:var(--cream);border:1px solid var(--line)}
+.m.u{background:var(--teal);color:#fff;justify-self:end}
+.qr{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 16px}
+.qr button{font:inherit;font-size:.78rem;font-weight:700;border:1.5px solid var(--teal);color:var(--teal);background:transparent;border-radius:999px;padding:6px 10px;cursor:pointer}
+@media (max-width:600px){.bot span.t{display:none}.bot{padding:10px}}
+
+.reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease, transform .7s ease}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none}.hero-art .ring{animation:none}}
+</style>
+</head>
+<body>
+
+<!-- =============== NAV =============== -->
+<nav class="nav">
+  <div class="wrap">
+    <a href="#top" class="logo" aria-label="IronEye inicio">
+      <svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#F2B418"/><path d="M6 20c4-6.5 9-9.5 14-9.5S30 13.5 34 20c-4 6.5-9 9.5-14 9.5S10 26.5 6 20z" fill="#fff"/><circle cx="20" cy="20" r="5.5" fill="#0E2433"/><circle cx="22" cy="18" r="1.6" fill="#fff"/></svg>
+      <span>Iron<b>Eye</b></span>
+    </a>
+    <ul>
+      <li><a href="#servicios">Servicios</a></li>
+      <li><a href="#como">Cómo funciona</a></li>
+      <li><a href="#propuesta">Propuesta de valor</a></li>
+      <li><a href="#impacto">Impacto</a></li>
+      <li><a href="#marketing">Marketing digital</a></li>
+      <li><a href="#recursos">Recursos</a></li>
+    </ul>
+    <a href="#contacto" class="btn btn-primary">Solicitar demo</a>
+  </div>
+</nav>
+
+<!-- =============== HERO =============== -->
+<header class="hero" id="top">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">Tamizaje de anemia infantil · 24 a 60 meses</span>
+      <h1 style="margin-top:18px">Sin agujas, sin miedo, con resultados. <em>Una mirada basta.</em></h1>
+      <p class="lead">IronEye convierte un smartphone en una herramienta de tamizaje de anemia: analiza la conjuntiva del ojo con inteligencia artificial ajustada por altitud y entrega el resultado en segundos, sin pinchazos ni reactivos. Pensado para la realidad del puesto de salud.</p>
+      <div class="hero-cta">
+        <a href="#contacto" class="btn btn-primary">Agendar demostración en mi IPRESS
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+        <a href="#como" class="btn btn-ghost">Ver cómo funciona</a>
+      </div>
+      <div class="hero-proof">
+        <div><strong>0</strong><span>pinchazos</span></div>
+        <div><strong>25</strong><span>niños por hora</span></div>
+        <div><strong>89.9%</strong><span>sensibilidad IA</span></div>
+      </div>
+    </div>
+    <div class="hero-art reveal">
+      <div class="disc"></div>
+      <div class="ring"></div>
+      <img src="producto.jpeg" alt="Dispositivo IronEye con forma de jirafa amarilla y clip para smartphone">
+      <div class="float f1"><div class="ic" style="background:var(--teal-soft)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#1F7A80" stroke-width="2.4" stroke-linecap="round"><path d="M12 3v18M3 12h18" transform="rotate(45 12 12)"/></svg></div><div><b>Sin microcuvetas</b>ni residuos biocontaminados</div></div>
+      <div class="float f2"><div class="ic" style="background:var(--sun-soft)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8A5A2B" stroke-width="2.4" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div><div><b>Resultado inmediato</b>en la misma consulta CRED</div></div>
+      <div class="float f3"><div class="ic" style="background:#FDE9E4"><svg width="18" height="18" viewBox="0 0 24 24" fill="#D9534F"><path d="M12 21s-7.5-4.6-9.5-9.2C1 8.2 3.3 5 6.6 5c2 0 3.4 1.1 4.2 2.4h2.4C14 6.1 15.4 5 17.4 5 20.7 5 23 8.2 21.5 11.8 19.5 16.4 12 21 12 21z"/></svg></div><div><b>Diseño amigable</b>para que el niño no tenga miedo</div></div>
+    </div>
+  </div>
+</header>
+
+<!-- =============== PROBLEMA =============== -->
+<section class="problem" id="problema">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">Por qué existimos</span>
+      <h2 style="margin-top:14px">Detectar la anemia a tiempo no debería doler.</h2>
+      <p class="lead">Hoy el descarte requiere una muestra de sangre capilar o venosa. El llanto y el miedo alejan a las familias del control, y los puestos de salud I-1 a I-4 no cuentan con laboratorio ni, muchas veces, con personal médico.</p>
+    </div>
+    <div class="pstats reveal">
+      <div class="pstat"><strong>34.9%</strong><span>prevalencia nacional de anemia infantil en el Perú</span></div>
+      <div class="pstat"><strong>9%</strong><span>del coeficiente intelectual puede perderse si hay anemia antes de los 3 años</span></div>
+      <div class="pstat"><strong>1,000+</strong><span>IPRESS públicas de primer nivel identificadas como aliadas</span></div>
+      <div class="pain">
+        <div>Dolor y miedo en niños pequeños</div>
+        <div>Necesidad de personal capacitado</div>
+        <div>Mayor tiempo de atención</div>
+        <div>Menor aceptación de los cuidadores</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== SERVICIOS =============== -->
+<section id="servicios">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Servicios a ofrecer</span>
+      <h2>Una solución completa para tu red de salud</h2>
+      <p class="lead">Venta directa institucional del módulo + suscripción anual al servicio en la nube. El smartphone lo pone la IPRESS; nosotros ponemos todo lo demás.</p>
+    </div>
+
+    <div class="shop reveal">
+      <article class="product">
+        <div class="pic"><img src="producto.jpeg" alt="Módulo IronEye"></div>
+        <div>
+          <span class="tag">Hardware · Garantía 12 meses</span>
+          <h3>Módulo IronEye</h3>
+          <p style="color:var(--ink-2);font-size:.93rem">Dispositivo estandarizador de imagen que se acopla a cualquier smartphone: iluminación LED controlada (PWM), lente macro 12.5x y distancia fija.</p>
+          <div class="price"><strong>S/ 550</strong><span>precio por módulo</span></div>
+          <ul class="checks">
+            <li>Fabricación, ensamblaje y calibración</li>
+            <li>Estuche rígido resistente a agua, golpes y polvo</li>
+            <li>Reemplazo inmediato por garantía</li>
+          </ul>
+          <a href="#contacto" class="btn btn-sun">Cotizar para mi red</a>
+        </div>
+      </article>
+      <article class="plan">
+        <span class="tag">Software + IA · Suscripción anual</span>
+        <h3>IronEye Cloud</h3>
+        <p style="color:#D4ECEA">App móvil con guía en pantalla y plataforma web con análisis de IA para cada tamizaje.</p>
+        <ul class="checks">
+          <li>Estimación de hemoglobina con IA (U-Net + ResNet-34) ajustada por altitud</li>
+          <li>Reportes en formato del padrón nominal</li>
+          <li>Tablero de prevalencia por distrito y centro de salud</li>
+          <li>Actualizaciones gratuitas del modelo de IA</li>
+          <li>Datos cifrados y respaldados en la nube</li>
+        </ul>
+        <a href="#contacto" class="btn btn-sun">Solicitar cotización</a>
+      </article>
+    </div>
+
+    <div class="services">
+      <div class="svc reveal">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10L12 5 2 10l10 5 10-5z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg></div>
+        <h3>Capacitación y certificación</h3>
+        <p>Formación continua del personal CRED y certificado de “Operador IRON-EYE”. No se requiere un médico presente.</p>
+      </div>
+      <div class="svc reveal">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a4 4 0 00-5.4 5.4L3 18l3 3 6.3-6.3a4 4 0 005.4-5.4l-2.5 2.5-2.4-.6-.6-2.4 2.5-2.5z"/></svg></div>
+        <h3>Soporte y mantenimiento</h3>
+        <p>Soporte técnico permanente, contrato de mantenimiento y calibración periódica del dispositivo.</p>
+      </div>
+      <div class="svc reveal">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 15l4-4 3 3 5-6"/></svg></div>
+        <h3>Gestión regional</h3>
+        <p>Tableros para DIRESA y redes: cobertura de tamizaje y prevalencia por distrito para decidir dónde intervenir.</p>
+      </div>
+      <div class="svc reveal">
+        <div class="ic"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8A5A2B" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg></div>
+        <h3>Acompañamiento activo</h3>
+        <p>La app detecta cuando un centro deja de tamizar y activa una visita de apoyo antes del abandono.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== CÓMO FUNCIONA =============== -->
+<section class="how" id="como">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">Cómo funciona</span>
+      <h2>Cuatro pasos, menos de tres minutos</h2>
+    </div>
+    <div class="steps">
+      <div class="step reveal"><div class="n">1</div><h3>Acopla</h3><p>Coloca el smartphone en el clip de la jirafa y el espaciador frente al ojo del niño.</p></div>
+      <div class="step reveal"><div class="n">2</div><h3>Captura</h3><p>La app guía la toma con luz controlada y elige la mejor de 3 fotografías del párpado inferior.</p></div>
+      <div class="step reveal"><div class="n">3</div><h3>Analiza</h3><p>La IA segmenta la conjuntiva palpebral y estima la hemoglobina ajustada a la altitud de la localidad.</p></div>
+      <div class="step reveal"><div class="n">4</div><h3>Actúa</h3><p>Resultado inmediato, registro en el padrón nominal y derivación oportuna si hay sospecha de anemia.</p></div>
+    </div>
+
+    <div class="use reveal">
+      <img src="uso.jpeg" alt="Personal de salud usando IronEye en el ojo de una joven">
+      <div>
+        <p class="quote">“Lo que antes era un pinchazo y lágrimas, ahora es una <em>foto</em>. El niño mira a la jirafa y en segundos tenemos el resultado.”</p>
+        <p class="note" style="margin-top:14px">Escena de uso del prototipo durante las pruebas funcionales.</p>
+        <div class="kpis" style="grid-template-columns:repeat(3,1fr)">
+          <div class="kpi"><b>Smartphone</b><span>el que ya tiene la IPRESS</span></div>
+          <div class="kpi"><b>PWM + LED</b><span>iluminación estandarizada</span></div>
+          <div class="kpi"><b>Nube</b><span>historial y reportes</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== PROPUESTA DE VALOR =============== -->
+<section id="propuesta">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Ventajas competitivas · Propuesta de valor</span>
+      <h2>El aliado técnico del primer nivel de atención</h2>
+      <p class="lead">Primer dispositivo de tamizaje de anemia no invasivo y accesible, diseñado para puestos de salud sin laboratorio, con poco presupuesto y personal no médico.</p>
+    </div>
+    <div class="vp-grid">
+      <div class="vp hl reveal"><div class="k">100%</div><h3>No invasivo</h3><p style="margin-top:6px">Sin agujas ni sangre: se eliminan el dolor, el trauma y los residuos biocontaminados.</p></div>
+      <div class="vp reveal"><div class="k">S/ 0</div><h3>En reactivos por prueba</h3><p style="margin-top:6px">El costo por tamizaje cae drásticamente; con el método tradicional cada 100 pruebas cuestan S/ 1,000 en insumos.</p></div>
+      <div class="vp reveal"><div class="k">Altitud</div><h3>IA ajustada a la realidad peruana</h3><p style="margin-top:6px">Algoritmo calibrado por altitud, clave en regiones altoandinas como Puno.</p></div>
+    </div>
+
+    <div class="table-scroll reveal">
+      <table class="cmp">
+        <thead><tr><th>Criterio</th><th>Método tradicional (punción + hemoglobinómetro)</th><th class="us">IronEye</th></tr></thead>
+        <tbody>
+          <tr><td>Experiencia del niño</td><td>Pinchazo, dolor y llanto</td><td class="us">Una foto al ojo, sin dolor</td></tr>
+          <tr><td>Insumos por prueba</td><td>Lancetas y microcuvetas (≈ S/ 10 c/u)</td><td class="us">Ninguno</td></tr>
+          <tr><td>Residuos</td><td>Biocontaminados</td><td class="us">Cero</td></tr>
+          <tr><td>Capacidad</td><td>Limitada por preparación de muestra</td><td class="us">Hasta 25 niños por hora</td></tr>
+          <tr><td>Registro de datos</td><td>Manual, en papel</td><td class="us">Digital, cifrado y en el padrón nominal</td></tr>
+          <tr><td>Ajuste por altitud</td><td>Corrección manual</td><td class="us">Automático por IA</td></tr>
+          <tr><td>Gestión regional</td><td>Consolidación tardía</td><td class="us">Tablero en tiempo real</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Calculadora interactiva: engagement B2G -->
+    <div class="calc reveal" id="calculadora">
+      <div class="in">
+        <span class="tag">Calculadora de ahorro</span>
+        <h3 style="margin-top:10px;font-size:1.4rem">¿Cuánto ahorra tu red en reactivos?</h3>
+        <label for="kids">Niños tamizados al año: <span class="val" id="kidsV">14,000</span></label>
+        <input type="range" id="kids" min="500" max="90000" step="500" value="14000">
+        <label for="reps">Tamizajes por niño al año: <span class="val" id="repsV">2</span></label>
+        <input type="range" id="reps" min="1" max="4" step="1" value="2">
+        <p class="note" style="margin-top:10px">Referencia: S/ 1,000 en insumos por cada 100 pruebas con el método tradicional.</p>
+      </div>
+      <div class="out">
+        <span>Ahorro estimado en insumos</span>
+        <div class="big" id="save">S/ 280,000</div>
+        <span id="tears">28,000 pinchazos evitados al año</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== IMPACTO / ESTADÍSTICAS =============== -->
+<section class="impact" id="impacto">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Impacto y estadísticas</span>
+      <h2>Niños más sanos, familias más informadas</h2>
+    </div>
+    <div class="icards">
+      <div class="icard reveal" style="--c:#3F9C5A"><span class="tag" style="background:#E6F4EA;color:#2F7A45">Niño</span><h3>Menor estrés</h3><p>Evita el dolor y la ansiedad asociados a la punción sanguínea.</p></div>
+      <div class="icard reveal" style="--c:#7A5AC8"><span class="tag" style="background:#EFEAFB;color:#5B3FA8">Cobertura</span><h3>Mayor accesibilidad</h3><p>Tamizajes en más lugares con menos recursos, llegando a más familias.</p></div>
+      <div class="icard reveal" style="--c:#2C6FB7"><span class="tag" style="background:#E6EFFA;color:#245B96">Personal</span><h3>Campañas más ágiles</h3><p>Portátil y fácil de usar: optimiza el trabajo de salud y los programas comunitarios.</p></div>
+      <div class="icard reveal" style="--c:#E07B25"><span class="tag" style="background:#FDEEDF;color:#A95814">Futuro</span><h3>Detección temprana</h3><p>Tratamiento a tiempo, menos complicaciones y mejor desarrollo infantil.</p></div>
+    </div>
+    <div class="timeline">
+      <div class="tl reveal"><span class="yr">Año 1</span><strong>100 IPRESS</strong><span class="note">activas comercialmente</span>
+        <ul><li>14,000 niños tamizados</li><li>80% de satisfacción en enfermeras CRED</li></ul><div class="bar"><i style="width:64%"></i></div></div>
+      <div class="tl reveal"><span class="yr">Años 2 – 3</span><strong>127 IPRESS</strong><span class="note">integradas en regiones</span>
+        <ul><li>17,635 niños evaluados por año</li><li>95% de renovación del software</li></ul><div class="bar"><i style="width:81%"></i></div></div>
+      <div class="tl reveal"><span class="yr">Años 4 – 5</span><strong>156 IPRESS</strong><span class="note">consolidadas</span>
+        <ul><li>86,000+ tamizajes acumulados</li><li>Meta: adopción como norma técnica MINSA</li></ul><div class="bar"><i style="width:100%"></i></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== CAMPAÑA EMOCIONAL =============== -->
+<section class="brave">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow" style="color:var(--ink)">Campaña para familias</span>
+      <h2 style="margin-top:12px">#ValienteSinPinchazo</h2>
+      <p>Cada niño que se hace el tamizaje recibe su sticker y un certificado de valentía. Los padres lo comparten, el niño vuelve contento a su control CRED y la posta gana confianza en su comunidad.</p>
+      <p style="font-weight:700">Porque proteger su futuro empieza con una mirada.</p>
+    </div>
+    <div class="cert reveal" aria-label="Ejemplo de certificado para niños">
+      <div class="medal"><svg width="40" height="40" viewBox="0 0 40 40"><path d="M6 20c4-6.5 9-9.5 14-9.5S30 13.5 34 20c-4 6.5-9 9.5-14 9.5S10 26.5 6 20z" fill="#fff"/><circle cx="20" cy="20" r="5.5" fill="#0E2433"/></svg></div>
+      <div class="t">Certificado de Valentía</div>
+      <p style="margin-top:6px;color:var(--ink-2)">Se otorga a</p>
+      <div class="name">nombre del campeón</div>
+      <p class="note">por cuidar su salud mirando a la jirafa IronEye</p>
+    </div>
+  </div>
+</section>
+
+<!-- =============== ESTRATEGIA DE MARKETING DIGITAL =============== -->
+<section id="marketing">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Estrategia de marketing digital</span>
+      <h2>Venta directa + relaciones públicas, con lo digital como motor</h2>
+      <p class="lead">Un mercado B2G pequeño y concentrado (MINSA, DIRESA, GORE, redes de salud) exige confianza, evidencia y cercanía. Combinamos inbound marketing para educar y outbound selectivo para cerrar, sin publicidad masiva.</p>
+    </div>
+
+    <div class="funnel">
+      <div class="fstage reveal">
+        <div class="lbl"><span>TOFU · Atraer</span><b>Visibilidad</b></div>
+        <div class="chips"><span class="chip">SEO: “tamizaje de anemia sin pinchazo”</span><span class="chip">Blog y guías evergreen para padres</span><span class="chip">LinkedIn y Facebook</span><span class="chip">Radio comunitaria en quechua y aymara</span><span class="chip">Nota de prensa y reportaje</span><span class="chip ai">Microcontenido generado con IA y revisado por el equipo</span></div>
+      </div>
+      <div class="fstage reveal">
+        <div class="lbl"><span>MOFU · Convencer</span><b>Confianza</b></div>
+        <div class="chips"><span class="chip">Video testimonial “Resultados que se ven”</span><span class="chip">Webinars para jefaturas CRED</span><span class="chip">Evidencia científica y fichas técnicas</span><span class="chip">Email marketing segmentado (lead nurturing)</span><span class="chip">Retargeting en Meta y Google Ads</span></div>
+      </div>
+      <div class="fstage reveal">
+        <div class="lbl"><span>BOFU · Convertir</span><b>Decisión</b></div>
+        <div class="chips"><span class="chip">Lead magnet: dossier técnico descargable</span><span class="chip">Demostración in situ agendada en línea</span><span class="chip">WhatsApp Business (98% de apertura)</span><span class="chip">Gestión en SEACE</span><span class="chip ai">Lead scoring con IA</span></div>
+      </div>
+      <div class="fstage reveal">
+        <div class="lbl"><span>Fidelizar</span><b>Relación</b></div>
+        <div class="chips"><span class="chip">Certificación de operadores</span><span class="chip">Reconocimiento público al centro con mayor cobertura</span><span class="chip">Kit de regalo al completar la capacitación</span><span class="chip ai">Alertas predictivas de desuso</span></div>
+      </div>
+    </div>
+
+    <div class="mk-two">
+      <div class="panel reveal">
+        <h3>Diseño gráfico y web</h3>
+        <p>Una identidad cálida y confiable: la jirafa conecta con los niños; el azul y el verde azulado transmiten rigor clínico a los compradores institucionales.</p>
+        <div class="swatches">
+          <div class="sw" style="background:#F2B418">Amarillo jirafa</div>
+          <div class="sw" style="background:#8A5A2B;color:#fff">Manchas</div>
+          <div class="sw" style="background:#1F7A80;color:#fff">Salud</div>
+          <div class="sw" style="background:#0E2433;color:#fff">Confianza</div>
+        </div>
+        <div class="type-demo">
+          <div><div class="a">Aa Fraunces</div><small>Titulares: cercana y humana</small></div>
+          <div><div class="b">Aa Manrope</div><small>Texto: clara y técnica</small></div>
+        </div>
+        <ul class="checks">
+          <li>Web responsive, carga ligera para conexiones rurales</li>
+          <li>Navegación en 1 clic hacia “Solicitar demo”</li>
+          <li>Mensaje memorable: “Una mirada basta”</li>
+          <li>Material gráfico: manual de uso, brochures, afiches, banners y mandiles con la marca</li>
+        </ul>
+      </div>
+      <div class="panel reveal">
+        <h3>Uso de inteligencia artificial</h3>
+        <p>Siguiendo el Marketing 7.0: IA para personalizar la experiencia, con autenticidad y supervisión humana.</p>
+        <div class="ai-list">
+          <div class="ai-item"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F2B418" stroke-width="2.2" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><div><b>Asistente virtual 24/7</b><span>Responde dudas de enfermeras y padres en español, quechua y aymara; agenda demos.</span></div></div>
+          <div class="ai-item"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F2B418" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></div><div><b>Lead scoring predictivo</b><span>Prioriza las redes de salud con mayor interés según visitas, descargas y asistencia a webinars.</span></div></div>
+          <div class="ai-item"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F2B418" stroke-width="2.2" stroke-linecap="round"><path d="M4 19h16M4 15l4-4 4 4 8-8"/></svg></div><div><b>Tableros de inteligencia sanitaria</b><span>Mapas de prevalencia que los propios clientes usan para gestionar — y que prueban nuestro valor.</span></div></div>
+          <div class="ai-item"><div class="ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F2B418" stroke-width="2.2" stroke-linecap="round"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></div><div><b>Contenido educativo adaptado</b><span>Borradores de guiones de radio y piezas gráficas generados con IA, validados culturalmente por el equipo.</span></div></div>
+        </div>
+      </div>
+    </div>
+
+    <h3 class="reveal" style="margin-top:48px;font-size:1.5rem">Campañas del primer año</h3>
+    <div class="campaigns">
+      <div class="camp reveal"><span class="when">Meses 1 – 6</span><h3>Validación en campo</h3><p>Demos y capacitación en 5 centros de salud, material gráfico y spots en radio comunitaria.</p><div class="cost">S/ 3,600</div></div>
+      <div class="camp reveal"><span class="when">Meses 6 – 9</span><h3>“Resultados que se ven”</h3><p>Resultados con DIRESA y GORE, nota de prensa, video testimonial y stand en congreso de salud.</p><div class="cost">S/ 3,000</div></div>
+      <div class="camp reveal"><span class="when">Meses 9 – 12</span><h3>Licitación y escalamiento</h3><p>Gestión en SEACE, visitas a MINSA y GORE, dossier técnico y webinars.</p><div class="cost">S/ 2,500</div></div>
+    </div>
+
+    <div class="kpis reveal">
+      <div class="kpi"><b>Google Analytics</b><span>tráfico, origen y conversiones</span></div>
+      <div class="kpi"><b>Demos agendadas</b><span>KPI principal de conversión</span></div>
+      <div class="kpi"><b>Descargas del dossier</b><span>leads calificados</span></div>
+      <div class="kpi"><b>S/ 9,100</b><span>inversión total en campañas, año 1</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== TESTIMONIOS =============== -->
+<section style="background:var(--paper);border-top:1px solid var(--line)" id="testimonios">
+  <div class="wrap">
+    <div class="sec-head center reveal">
+      <span class="eyebrow">Testimonios</span>
+      <h2>Lo que dicen quienes lo usan</h2>
+      <p class="note">Boceto: los testimonios se completarán con casos reales de la campaña de validación en campo.</p>
+    </div>
+    <div class="tests">
+      <div class="test reveal"><p>“Antes, la mitad de las mamás no regresaban al control por miedo al pinchazo. Ahora los niños piden ver a la jirafa.”</p><div class="who"><div class="av" style="background:var(--teal)">EC</div><div><b>Enfermera CRED</b><span>Puesto de salud I-2 · Puno</span></div></div></div>
+      <div class="test reveal"><p>“El tablero por distrito nos dice dónde reforzar la suplementación sin esperar el consolidado trimestral.”</p><div class="who"><div class="av" style="background:var(--ink)">DR</div><div><b>Coordinador de red</b><span>DIRESA</span></div></div></div>
+      <div class="test reveal"><p>“Mi hijo salió con su sticker de valiente. Fue la primera vez que no lloró en el control.”</p><div class="who"><div class="av" style="background:var(--brown)">MA</div><div><b>Madre de familia</b><span>Centro de salud rural</span></div></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- =============== TUTORIALES + NORMATIVIDAD =============== -->
+<section id="recursos">
+  <div class="wrap">
+    <div class="sec-head reveal">
+      <span class="eyebrow">Recursos</span>
+      <h2>Aprende, usa y confía</h2>
+    </div>
+    <div class="two-col">
+      <div class="vids">
+        <a class="vid reveal" href="#recursos"><div class="thumb"><div class="play"><svg width="14" height="14" viewBox="0 0 24 24" fill="#0E2433"><path d="M7 4l14 8-14 8z"/></svg></div><span class="dur">1:30</span></div><div><b>Tutorial 1 · Acoplar el smartphone</b><span>Cómo fijar el clip y verificar la alineación del lente.</span></div></a>
+        <a class="vid reveal" href="#recursos"><div class="thumb"><div class="play"><svg width="14" height="14" viewBox="0 0 24 24" fill="#0E2433"><path d="M7 4l14 8-14 8z"/></svg></div><span class="dur">2:10</span></div><div><b>Tutorial 2 · La toma perfecta</b><span>Posicionar el espaciador y elegir la mejor de 3 fotos.</span></div></a>
+        <a class="vid reveal" href="#recursos"><div class="thumb"><div class="play"><svg width="14" height="14" viewBox="0 0 24 24" fill="#0E2433"><path d="M7 4l14 8-14 8z"/></svg></div><span class="dur">1:45</span></div><div><b>Tutorial 3 · Leer e interpretar el reporte</b><span>Resultado, derivación y registro en el padrón nominal.</span></div></a>
+        <a class="vid reveal" href="#recursos"><div class="thumb" style="background:linear-gradient(135deg,var(--sun),#E08B18)"><div class="play" style="background:#fff"><svg width="14" height="14" viewBox="0 0 24 24" fill="#0E2433"><path d="M7 4l14 8-14 8z"/></svg></div><span class="dur">0:50</span></div><div><b>Para familias · ¿Qué es la anemia?</b><span>Video corto en español, quechua y aymara.</span></div></a>
+      </div>
+      <div class="norms reveal">
+        <h3>Normatividad y confianza</h3>
+        <div class="norm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F2B418" stroke-width="2" stroke-linecap="round"><path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6z"/></svg><div><b>Registro sanitario DIGEMID</b><span>Dispositivo médico de diagnóstico portátil (hardware + software).</span><br><span class="status">En trámite</span></div></div>
+        <div class="norm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F2B418" stroke-width="2" stroke-linecap="round"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 018 0v3"/></svg><div><b>Ley N.° 29733 de Protección de Datos Personales</b><span>Datos de salud cifrados y acceso restringido por rol.</span><br><span class="status ok">Por diseño</span></div></div>
+        <div class="norm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F2B418" stroke-width="2" stroke-linecap="round"><path d="M4 4h12l4 4v12H4z"/><path d="M8 12h8M8 16h5"/></svg><div><b>Normas técnicas MINSA de anemia</b><span>Puntos de corte y ajuste de hemoglobina por altitud.</span><br><span class="status ok">Alineado</span></div></div>
+        <div class="norm"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F2B418" stroke-width="2" stroke-linecap="round"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6"/></svg><div><b>Contrataciones públicas · SEACE</b><span>Canal formal para compras de MINSA, DIRESA y GORE.</span><br><span class="status ok">Habilitado</span></div></div>
+      </div>
+    </div>
+
+    <div class="sec-head center reveal" style="margin:80px 0 28px">
+      <span class="eyebrow">Preguntas frecuentes</span>
+      <h2>Resolvemos tus dudas</h2>
+    </div>
+    <div class="faq reveal">
+      <details open><summary>¿IronEye reemplaza al análisis de sangre?</summary><p>IronEye es una herramienta de tamizaje: identifica rápidamente a los niños con sospecha de anemia para derivarlos a confirmación y tratamiento oportuno.</p></details>
+      <details><summary>¿Necesito un médico para usarlo?</summary><p>No. Está diseñado para personal capacitado no médico. Tras la capacitación, el personal recibe la certificación de Operador IRON-EYE.</p></details>
+      <details><summary>¿Funciona sin buena señal de internet?</summary><p>La captura se realiza en el dispositivo; el envío a la nube y los reportes se sincronizan cuando hay conexión.</p></details>
+      <details><summary>¿Cómo compra mi red de salud?</summary><p>Mediante venta directa institucional o proceso en SEACE. El modelo combina el módulo (S/ 550) con una suscripción anual al servicio en la nube.</p></details>
+      <details><summary>¿Qué pasa si el dispositivo falla?</summary><p>Tiene 12 meses de garantía de fábrica con reemplazo inmediato, además de soporte técnico permanente.</p></details>
+    </div>
+  </div>
+</section>
+
+<!-- =============== CONTACTO =============== -->
+<section class="contact" id="contacto">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">Hablemos</span>
+      <h2 style="margin-top:14px">Lleva IronEye a tu red de salud</h2>
+      <p class="lead">Agenda una demostración gratuita en tu establecimiento. Te mostramos el tamizaje en vivo, con tu personal y tus niños.</p>
+      <div class="ch">
+        <a href="#contacto"><svg width="22" height="22" viewBox="0 0 24 24" fill="#25D366"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2z"/></svg><div>WhatsApp Business<small>Respuesta en menos de 1 hora</small></div></a>
+        <a href="#contacto"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F2B418" stroke-width="2"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg><div>Correo institucional<small>contacto@ironeye.pe (referencial)</small></div></a>
+        <a href="#contacto"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F2B418" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M8 11v5M8 8v.01M12 16v-5m0 2a2 2 0 014 0v3"/></svg><div>LinkedIn<small>Novedades, evidencia y webinars</small></div></a>
+      </div>
+    </div>
+    <form class="reveal" id="demoForm">
+      <h3>Solicitar demostración</h3>
+      <div class="fr">
+        <label>Nombre completo<input required placeholder="Nombre y apellido"></label>
+        <label>Cargo<select><option>Enfermera(o) CRED</option><option>Jefatura de IPRESS</option><option>Coordinador(a) de red / DIRESA</option><option>Gobierno regional / local</option><option>Otro</option></select></label>
+      </div>
+      <div class="fr">
+        <label>Institución<input placeholder="IPRESS, red o DIRESA"></label>
+        <label>Región<input placeholder="Ej. Puno"></label>
+      </div>
+      <label>¿Cuántos niños atienden al mes?<select><option>Menos de 100</option><option>100 – 500</option><option>500 – 1,000</option><option>Más de 1,000</option></select></label>
+      <label>Mensaje<textarea rows="3" placeholder="Cuéntanos sobre tu establecimiento"></textarea></label>
+      <button class="btn btn-primary" type="submit" style="justify-self:start">Quiero mi demo</button>
+      <div class="ok-msg" id="okMsg">¡Gracias! Te contactaremos por WhatsApp para coordinar la visita. (Boceto: el formulario no envía datos.)</div>
+      <p class="note">Recibirás el dossier técnico de IronEye en tu correo.</p>
+    </form>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>
+      <a class="logo" href="#top"><svg width="30" height="30" viewBox="0 0 40 40" aria-hidden="true"><circle cx="20" cy="20" r="19" fill="#F2B418"/><path d="M6 20c4-6.5 9-9.5 14-9.5S30 13.5 34 20c-4 6.5-9 9.5-14 9.5S10 26.5 6 20z" fill="#fff"/><circle cx="20" cy="20" r="5.5" fill="#0E2433"/></svg>IronEye</a>
+      <p>Tamizaje de anemia infantil no invasivo con inteligencia artificial. Con el aval académico de la Universidad Peruana Cayetano Heredia.</p>
+    </div>
+    <div><h4>Producto</h4><ul><li><a href="#servicios">Servicios</a></li><li><a href="#como">Cómo funciona</a></li><li><a href="#calculadora">Calculadora</a></li></ul></div>
+    <div><h4>Recursos</h4><ul><li><a href="#recursos">Tutoriales</a></li><li><a href="#recursos">Normatividad</a></li><li><a href="#testimonios">Testimonios</a></li></ul></div>
+    <div><h4>Equipo</h4><ul><li>Alexandra Lema Torres</li><li>Kiara Muñoz Benites</li><li>Fernando Zela Guevara</li><li>David Eddy Aguilar Yahuana</li></ul></div>
+    <div class="legal"><span>© 2026 IronEye · Modelos de Negocio en Bioingeniería</span><span>Boceto de sitio web con fines académicos</span></div>
+  </div>
+</footer>
+
+<!-- Asistente IA + WhatsApp (flotantes) -->
+<div class="botwin" id="botwin" role="dialog" aria-label="Asistente IronEye">
+  <header><div><b>Asistente IronEye</b><small>IA · español · quechua · aymara</small></div><button onclick="toggleBot()" style="background:none;border:0;color:#fff;font-size:1.3rem;cursor:pointer" aria-label="Cerrar">×</button></header>
+  <div class="msgs" id="msgs"><div class="m b">¡Hola! Soy el asistente de IronEye 🦒 ¿En qué te ayudo?</div></div>
+  <div class="qr">
+    <button onclick="ask(0)">¿Duele?</button>
+    <button onclick="ask(1)">Precio</button>
+    <button onclick="ask(2)">Agendar demo</button>
+  </div>
+</div>
+<button class="bot" onclick="toggleBot()"><span class="dot">🦒</span><span class="t">¿Dudas? Pregúntale a la IA</span></button>
+<a class="wa" href="#contacto" aria-label="WhatsApp"><svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm5.2 13.8c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.7-.1l.9-1.1c.2-.3.4-.2.7-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg></a>
+
+<script>
+// Revelado suave al hacer scroll
+const io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('in');io.unobserve(e.target)}}),{threshold:.12});
+document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+
+// Calculadora de ahorro: S/ 1,000 por cada 100 pruebas = S/ 10 por prueba
+const kids=document.getElementById('kids'),reps=document.getElementById('reps');
+const fmt=n=>n.toLocaleString('es-PE');
+function calc(){
+  const k=+kids.value,r=+reps.value,tests=k*r;
+  document.getElementById('kidsV').textContent=fmt(k);
+  document.getElementById('repsV').textContent=r;
+  document.getElementById('save').textContent='S/ '+fmt(tests*10);
+  document.getElementById('tears').textContent=fmt(tests)+' pinchazos evitados al año';
+}
+kids.oninput=reps.oninput=calc;calc();
+
+// Formulario (boceto: no envía datos)
+document.getElementById('demoForm').addEventListener('submit',e=>{e.preventDefault();document.getElementById('okMsg').style.display='block'});
+
+// Asistente IA (simulado)
+function toggleBot(){document.getElementById('botwin').classList.toggle('open')}
+const QA=[
+  ['¿Le duele al niño?','No. IronEye solo toma una foto del párpado inferior con luz suave. Sin agujas ni sangre.'],
+  ['¿Cuánto cuesta?','El módulo cuesta S/ 550 e incluye calibración y 12 meses de garantía. La suscripción anual al software se cotiza según tu red.'],
+  ['Quiero agendar una demo','¡Genial! Completa el formulario de contacto o escríbenos por WhatsApp y coordinamos una visita a tu establecimiento.']
+];
+function ask(i){
+  const m=document.getElementById('msgs');
+  m.insertAdjacentHTML('beforeend','<div class="m u">'+QA[i][0]+'</div><div class="m b">'+QA[i][1]+'</div>');
+  m.scrollTop=m.scrollHeight;
+}
+</script>
+</body>
+</html>
