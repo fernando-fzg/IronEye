@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IronEye - Plan de Acción, Indicadores y Presupuesto</title>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Chart.js CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ironeye: {
+                            teal: '#0B4F4A',
+                            tealHover: '#136962',
+                            tealLight: '#E6F4F1',
+                            tealBorder: '#A0D8D0',
+                            gold: '#E5A00D',
+                            goldHover: '#C78909',
+                            goldLight: '#FEF9C3',
+                            bg: '#F8FAFC',
+                            cardBg: '#FFFFFF',
+                            slateDark: '#1E293B',
+                            slateMuted: '#64748B'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif']
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 25px -5px rgba(11, 79, 74, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.01)',
+                        'card': '0 4px 15px rgba(0, 0, 0, 0.03)',
+                        'hover': '0 15px 30px -5px rgba(11, 79, 74, 0.12)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8FAFC;
+            color: #1E293B;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #F1F5F9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #CBD5E1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #0B4F4A;
+        }
+
+        /* Print Optimization */
+        @media print {
+            .no-print {
+                display: none !important;
+            }
+            body {
+                background: white !important;
+                color: black !important;
+            }
+            .print-card {
+                box-shadow: none !important;
+                border: 1px solid #CBD5E1 !important;
+                page-break-inside: avoid;
+            }
+            .table-responsive {
+                overflow: visible !important;
+            }
+        }
+
+        /* Pulse Subtle Animation */
+        @keyframes subtlePulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.95; transform: scale(1.02); }
+        }
+        .animate-subtle {
+            animation: subtlePulse 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between selection:bg-ironeye-teal selection:text-white">
+
+    <div>
+        <!-- TOP BRANDING BAR -->
+        <header class="bg-ironeye-teal text-white shadow-lg relative overflow-hidden border-b-4 border-ironeye-gold">
+            <!-- Background Decorative Geometric Overlay -->
+            <div class="absolute inset-0 opacity-10 bg-[radial-gradient(#E5A00D_1px,transparent_1px)] [background-size:16px_16px] pointer-events-none"></div>
+
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 relative z-10">
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-6">
+                    
+                    <!-- Title & Subtitle -->
+                    <div class="flex items-start gap-4">
+                        <div class="w-14 h-14 rounded-2xl bg-white/10 backdrop-blur-md border border-white/20 flex items-center justify-center shrink-0 shadow-inner">
+                            <i data-lucide="eye" class="w-8 h-8 text-ironeye-gold animate-subtle"></i>
+                        </div>
+                        <div>
+                            <div class="flex flex-wrap items-center gap-2 mb-1">
+                                <span class="bg-ironeye-gold text-ironeye-slateDark text-xs font-extrabold px-2.5 py-0.5 rounded-full uppercase tracking-wider shadow-sm">
+                                    IronEye Project
+                                </span>
+                                <span class="bg-white/15 text-emerald-200 text-xs font-semibold px-2.5 py-0.5 rounded-full border border-white/10">
+                                    Plenaria 2
+                                </span>
+                                <span class="bg-white/10 text-white/90 text-xs font-medium px-2.5 py-0.5 rounded-full">
+                                    Fase Piloto / Año 1
+                                </span>
+                            </div>
+                            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-white">
+                                Plan de Acción, Indicadores y Presupuesto
+                            </h1>
+                            <p class="text-emerald-100/80 text-sm sm:text-base mt-1 max-w-2xl font-light">
+                                Tamizaje no invasivo de anemia pediátrica (24-60 meses) mediante análisis de imagen de la conjuntiva palpebral con IA en la nube.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Header Actions & Budget Summary -->
+                    <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 no-print">
+                        <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-xl p-3 text-right">
+                            <span class="text-xs text-emerald-100 uppercase tracking-wider block font-medium">Presupuesto Piloto Total</span>
+                            <span class="text-2xl font-black text-ironeye-gold tracking-tight">S/ 10,000.00</span>
+                        </div>
+                        <button onclick="window.print()" class="bg-ironeye-gold hover:bg-ironeye-goldHover text-ironeye-slateDark font-bold px-4 py-3 rounded-xl transition-all duration-200 flex items-center justify-center gap-2 shadow-md hover:shadow-lg active:scale-95">
+                            <i data-lucide="printer" class="w-4 h-4"></i>
+                            <span>Exportar / Imprimir</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </header>
+
+        <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+            
+            <!-- KPI METRICS GRID -->
+            <section class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+                
+                <!-- KPI 1 -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-soft hover:shadow-hover transition-all duration-300 print-card group">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Presupuesto Total</span>
+                        <div class="w-9 h-9 rounded-xl bg-teal-50 text-ironeye-teal flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i data-lucide="coins" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-ironeye-teal">S/ 10,000</div>
+                    <div class="text-xs text-slate-500 mt-1 flex items-center gap-1 font-medium">
+                        <span class="text-emerald-600 font-bold">100%</span> Asignado a Fase Piloto
+                    </div>
+                </div>
+
+                <!-- KPI 2 -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-soft hover:shadow-hover transition-all duration-300 print-card group">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Módulos IronEye</span>
+                        <div class="w-9 h-9 rounded-xl bg-amber-50 text-ironeye-gold flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i data-lucide="smartphone" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-800">20 Kits</div>
+                    <div class="text-xs text-slate-500 mt-1 font-medium">
+                        Hardware opto-electrónico
+                    </div>
+                </div>
+
+                <!-- KPI 3 -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-soft hover:shadow-hover transition-all duration-300 print-card group">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Meta Tamizaje</span>
+                        <div class="w-9 h-9 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i data-lucide="users" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-800">500 Niños</div>
+                    <div class="text-xs text-slate-500 mt-1 font-medium">
+                        Población 24 a 60 meses
+                    </div>
+                </div>
+
+                <!-- KPI 4 -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-soft hover:shadow-hover transition-all duration-300 print-card group">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Leads B2G Meta</span>
+                        <div class="w-9 h-9 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i data-lucide="target" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="text-2xl font-black text-slate-800">150 Decisores</div>
+                    <div class="text-xs text-slate-500 mt-1 font-medium">
+                        Directores IPRESS & CRED
+                    </div>
+                </div>
+
+                <!-- KPI 5 -->
+                <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-soft hover:shadow-hover transition-all duration-300 print-card group">
+                    <div class="flex items-center justify-between mb-3">
+                        <span class="text-xs font-bold uppercase tracking-wider text-slate-500">Precisión IA</span>
+                        <div class="w-9 h-9 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+                            <i data-lucide="brain-circuit" class="w-5 h-5"></i>
+                        </div>
+                    </div>
+                    <div class="text-xl font-black text-slate-800">89.9% Sens.</div>
+                    <div class="text-xs text-slate-500 mt-1 font-medium">
+                        82.3% Especificidad
+                    </div>
+                </div>
+
+            </section>
+
+            <!-- ACTION PLAN TABLE SECTION -->
+            <section class="bg-white rounded-2xl border border-slate-200/80 shadow-soft overflow-hidden print-card">
+                
+                <!-- Controls & Filter Bar -->
+                <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex flex-col md:flex-row md:items-center justify-between gap-4 no-print">
+                    <div>
+                        <h2 class="text-xl font-bold text-slate-800 flex items-center gap-2">
+                            <i data-lucide="list-checks" class="w-5 h-5 text-ironeye-teal"></i>
+                            Matriz de Plan de Acción y Desembolsos
+                        </h2>
+                        <p class="text-xs text-slate-500 mt-0.5">
+                            Haz clic en cualquier fila para desplegar la ficha detallada de la actividad.
+                        </p>
+                    </div>
+
+                    <!-- Search and Filters -->
+                    <div class="flex flex-wrap items-center gap-3">
+                        <!-- Search Box -->
+                        <div class="relative min-w-[200px]">
+                            <i data-lucide="search" class="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"></i>
+                            <input type="text" id="searchInput" onkeyup="filterTable()" placeholder="Buscar acción o indicador..." 
+                                   class="w-full pl-9 pr-4 py-2 bg-white border border-slate-200 rounded-xl text-xs font-medium focus:outline-none focus:border-ironeye-teal focus:ring-2 focus:ring-ironeye-teal/20 transition-all">
+                        </div>
+
+                        <!-- Filter Responsible -->
+                        <select id="filterResponsible" onchange="filterTable()" 
+                                class="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-ironeye-teal">
+                            <option value="">Todos los Responsables</option>
+                            <option value="David Eddy Aguilar Yahuana">David Eddy Aguilar Yahuana</option>
+                            <option value="Fernando Zela Guevara">Fernando Zela Guevara</option>
+                            <option value="Alexandra Lema Torres">Alexandra Lema Torres</option>
+                            <option value="Kiara Muñoz Benites">Kiara Muñoz Benites</option>
+                        </select>
+
+                        <!-- Filter Category -->
+                        <select id="filterCategory" onchange="filterTable()" 
+                                class="bg-white border border-slate-200 rounded-xl px-3 py-2 text-xs font-medium text-slate-700 focus:outline-none focus:border-ironeye-teal">
+                            <option value="">Todas las Categorías</option>
+                            <option value="Hardware">Hardware & Manufactura</option>
+                            <option value="Software">Software & Cloud AI</option>
+                            <option value="Marketing">Marketing & B2G</option>
+                            <option value="Operaciones">Validación & Operaciones</option>
+                            <option value="Legales">Legales & Licitaciones</option>
+                        </select>
+
+                        <button onclick="resetFilters()" title="Restablecer Filtros" 
+                                class="p-2 text-slate-500 hover:text-ironeye-teal hover:bg-slate-100 rounded-xl transition-colors">
+                            <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Table Container -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse" id="actionTable">
+                        <thead>
+                            <tr class="bg-ironeye-teal text-white text-xs font-semibold uppercase tracking-wider border-b-2 border-ironeye-gold">
+                                <th class="py-3.5 px-4 sm:px-6">Acción / Descripción</th>
+                                <th class="py-3.5 px-4 sm:px-6">Indicador Meta</th>
+                                <th class="py-3.5 px-4 sm:px-6">Responsable</th>
+                                <th class="py-3.5 px-4 sm:px-6 text-center">Cuándo</th>
+                                <th class="py-3.5 px-4 sm:px-6 text-right">Cuánto (S/.)</th>
+                                <th class="py-3.5 px-4 sm:px-6 text-right min-w-[140px]">% Presupuesto</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-slate-100 text-sm font-normal text-slate-700" id="tableBody">
+                            <!-- Dynamic Content Rendered via JS -->
+                        </tbody>
+                        <tfoot class="bg-ironeye-teal text-white font-bold text-sm">
+                            <tr>
+                                <td colspan="4" class="py-4 px-4 sm:px-6 text-right text-xs uppercase tracking-wider text-ironeye-gold font-extrabold">
+                                    Total Presupuesto del Proyecto (Fase Piloto):
+                                </td>
+                                <td class="py-4 px-4 sm:px-6 text-right text-lg text-ironeye-gold font-black whitespace-nowrap">
+                                    S/ 10,000.00
+                                </td>
+                                <td class="py-4 px-4 sm:px-6 text-right text-white font-extrabold">
+                                    100.0%
+                                </td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+
+            </section>
+
+            <!-- CHARTS & VISUALIZATION SECTION -->
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                
+                <!-- Doughnut Chart Card -->
+                <div class="lg:col-span-5 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-soft print-card flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                                <i data-lucide="pie-chart" class="w-5 h-5 text-ironeye-teal"></i>
+                                Distribución Presupuestal por Categoría
+                            </h3>
+                            <span class="text-xs bg-teal-50 text-ironeye-teal px-2 py-1 rounded-md font-semibold">S/ 10,000.00</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-4">
+                            Proporción del capital invertido en hardware, desarrollo de software cloud, marketing institucional y validación en campo.
+                        </p>
+                    </div>
+                    <div class="relative h-64 w-full flex items-center justify-center">
+                        <canvas id="budgetDoughnutChart"></canvas>
+                    </div>
+                    <div class="grid grid-cols-2 gap-2 mt-4 text-xs pt-3 border-t border-slate-100">
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-[#0B4F4A]"></span>
+                            <span class="text-slate-600 font-medium">Hardware (40%)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-[#136962]"></span>
+                            <span class="text-slate-600 font-medium">Operaciones (23%)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-[#E5A00D]"></span>
+                            <span class="text-slate-600 font-medium">Cloud & IA (15%)</span>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <span class="w-3 h-3 rounded-full bg-[#0284C7]"></span>
+                            <span class="text-slate-600 font-medium">Licitaciones (12%)</span>
+                        </div>
+                        <div class="flex items-center gap-2 col-span-2">
+                            <span class="w-3 h-3 rounded-full bg-[#8B5CF6]"></span>
+                            <span class="text-slate-600 font-medium">Marketing B2G (10%)</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Horizontal Timeline / Bar Chart Card -->
+                <div class="lg:col-span-7 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-soft print-card flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-bold text-slate-800 text-base flex items-center gap-2">
+                                <i data-lucide="bar-chart-3" class="w-5 h-5 text-ironeye-teal"></i>
+                                Monto Asignado por Línea de Acción (S/.)
+                            </h3>
+                            <span class="text-xs bg-amber-50 text-ironeye-gold px-2 py-1 rounded-md font-semibold">5 Fases de Ejecución</span>
+                        </div>
+                        <p class="text-xs text-slate-500 mb-4">
+                            Comparativa directa del costo económico invertido en cada componente clave del proyecto IronEye.
+                        </p>
+                    </div>
+                    <div class="relative h-72 w-full">
+                        <canvas id="budgetBarChart"></canvas>
+                    </div>
+                </div>
+
+            </div>
+
+            </main>
+    </div>
+
+    <!-- ACTION DETAIL MODAL -->
+    <div id="actionModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 transition-opacity">
+        <div class="bg-white rounded-2xl max-w-xl w-full shadow-2xl border border-slate-100 overflow-hidden transform transition-all scale-95 opacity-0 duration-200" id="modalCard">
+            
+            <!-- Modal Header -->
+            <div class="bg-ironeye-teal text-white p-6 relative">
+                <button onclick="closeModal()" class="absolute right-4 top-4 text-white/80 hover:text-white bg-white/10 p-1.5 rounded-full hover:bg-white/20 transition-colors">
+                    <i data-lucide="x" class="w-5 h-5"></i>
+                </button>
+                <span id="modalCategoryBadge" class="bg-ironeye-gold text-ironeye-slateDark text-[10px] font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider mb-2 inline-block">
+                    Categoría
+                </span>
+                <h3 id="modalTitle" class="text-xl font-extrabold text-white pr-6">
+                    Título de la Acción
+                </h3>
+            </div>
+
+            <!-- Modal Body -->
+            <div class="p-6 space-y-4 max-h-[70vh] overflow-y-auto text-slate-700">
+                <div>
+                    <h4 class="text-xs uppercase font-bold text-slate-400 tracking-wider mb-1">Descripción de la Tarea</h4>
+                    <p id="modalDescription" class="text-sm font-normal text-slate-800 leading-relaxed">
+                        Detalles
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 py-2 border-y border-slate-100 text-xs">
+                    <div>
+                        <span class="text-slate-400 block font-medium">Indicador Meta:</span>
+                        <span id="modalIndicator" class="font-bold text-slate-800 text-sm">Meta</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block font-medium">Cronograma:</span>
+                        <span id="modalWhen" class="font-bold text-slate-800 text-sm">Fechas</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-4 text-xs">
+                    <div>
+                        <span class="text-slate-400 block font-medium">Responsable Líder:</span>
+                        <span id="modalResponsible" class="font-bold text-ironeye-teal text-sm">Nombre</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 block font-medium">Monto Asignado:</span>
+                        <span id="modalCost" class="font-extrabold text-emerald-600 text-base">S/ 0.00</span>
+                    </div>
+                </div>
+
+                <div class="bg-slate-50 p-4 rounded-xl border border-slate-100 mt-4">
+                    <h5 class="text-xs font-bold text-slate-700 mb-1 flex items-center gap-1.5">
+                        <i data-lucide="shield-check" class="w-4 h-4 text-ironeye-teal"></i>
+                        Alineamiento con Objetivos del Proyecto
+                    </h5>
+                    <p id="modalAlignment" class="text-xs text-slate-600">
+                        Sustento
+                    </p>
+                </div>
+            </div>
+
+            <!-- Modal Footer -->
+            <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 text-right">
+                <button onclick="closeModal()" class="bg-ironeye-teal text-white font-semibold px-5 py-2.5 rounded-xl text-xs hover:bg-ironeye-tealHover transition-colors shadow-sm">
+                    Entendido
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-900 text-slate-400 text-xs py-8 border-t border-slate-800 mt-12 no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="w-8 h-8 rounded-lg bg-ironeye-teal flex items-center justify-center text-ironeye-gold font-bold">
+                    <i data-lucide="eye" class="w-4 h-4"></i>
+                </div>
+                <div>
+                    <span class="font-bold text-slate-200 block text-sm">IronEye — Grupo 10</span>
+                    <span class="text-slate-500 text-[11px]">Ingeniería Biomédica • Cayetano / PUCP</span>
+                </div>
+            </div>
+
+            <div class="text-center md:text-right text-slate-400 text-[11px] leading-relaxed">
+                <p><strong class="text-slate-300">Integrantes:</strong> Alexandra Lema Torres • Kiara Muñoz Benites • Fernando Zela Guevara • David Eddy Aguilar Yahuana</p>
+                <p class="mt-0.5 text-slate-500">Documentación oficial correspondiente al archivo de la Plenaria 2</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const actionData = [
+            {
+                id: 1,
+                action: "Fabricación de Módulos Opto-electrónicos",
+                description: "Fabricación, ensamblado en impresión 3D, lente macro, anillo LED estandarizado y empaque del prototipo.",
+                category: "Hardware",
+                categoryLabel: "Hardware & Manufactura",
+                indicator: "20 dispositivos IronEye listos para el plan piloto (tamizaje de 500 niños)",
+                responsible: "David Eddy Aguilar Yahuana",
+                when: "Meses 1 – 2",
+                cost: 4000.00,
+                percentage: 40.0,
+                alignment: "Garantiza la disponibilidad física del kit optoelectrónico estandarizado para las pruebas de campo en IPRESS."
+            },
+            {
+                id: 2,
+                action: "Infraestructura Cloud e Inteligencia Artificial",
+                description: "Despliegue en Firebase/Cloud Run, mantenimiento de la App Android CRED y cifrado de datos clínicos en tiempo real.",
+                category: "Software",
+                categoryLabel: "Software & Cloud AI",
+                indicator: "1 Plataforma operativa (capacidad de 25 eval/hora, 89.9% sensibilidad)",
+                responsible: "Fernando Zela Guevara",
+                when: "Meses 1 – 3",
+                cost: 1500.00,
+                percentage: 15.0,
+                alignment: "Asegura el procesamiento instantáneo en la nube con modelos de IA ajustados por altitud para diagnóstico en <5 min."
+            },
+            {
+                id: 3,
+                action: "Estrategia de Marketing Digital Inbound B2G",
+                description: "Campañas en LinkedIn, SEO para web institucional, material técnico descargable y automatizaciones en WhatsApp Business.",
+                category: "Marketing",
+                categoryLabel: "Marketing & B2G",
+                indicator: "150 leads calificados B2G (directores de IPRESS / coordinadores CRED)",
+                responsible: "Alexandra Lema Torres",
+                when: "Meses 2 – 6",
+                cost: 1000.00,
+                percentage: 10.0,
+                alignment: "Genera credibilidad técnica en los decisores públicos y automatiza el agendamiento directo de demostraciones."
+            },
+            {
+                id: 4,
+                action: "Piloto en Campo y Demostraciones Presenciales",
+                description: "Viajes a Puno/regiones rurales, talleres de validación presencial con personal de enfermería y brigadas CRED.",
+                category: "Operaciones",
+                categoryLabel: "Validación & Operaciones",
+                indicator: "20 demostraciones presenciales realizadas y 25% de conversión a solicitudes",
+                responsible: "Kiara Muñoz Benites",
+                when: "Meses 3 – 8",
+                cost: 2300.00,
+                percentage: 23.0,
+                alignment: "Valida la usabilidad del sistema por el personal de enfermería y logra la aceptación de las coordinaciones de salud."
+            },
+            {
+                id: 5,
+                action: "Permisos Institucionales y Licitaciones Públicas",
+                description: "Trámites de autorización con DIRESA, preparación de bases para contrataciones en SEACE y catálogo oficial B2G.",
+                category: "Legales",
+                categoryLabel: "Legales & Licitaciones",
+                indicator: "1 Permiso DIRESA obtenido y licitaciones iniciadas para el Kit (S/ 2,200 c/u)",
+                responsible: "Kiara Muñoz Benites / Alexandra Lema Torres",
+                when: "Meses 4 – 10",
+                cost: 1200.00,
+                percentage: 12.0,
+                alignment: "Permite la penetración comercial formal en el sector público a través de fondos institucionales MINSA/GORE."
+            }
+        ];
+
+        let doughnutChart = null;
+        let barChart = null;
+
+        function renderTable(data) {
+            const tbody = document.getElementById('tableBody');
+            tbody.innerHTML = '';
+
+            if (data.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="6" class="text-center py-8 text-slate-400">
+                            <i data-lucide="filter-x" class="w-8 h-8 mx-auto mb-2 opacity-50"></i>
+                            No se encontraron acciones que coincidan con los filtros aplicados.
+                        </td>
+                    </tr>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            data.forEach((item) => {
+                const tr = document.createElement('tr');
+                tr.className = "hover:bg-teal-50/40 transition-colors cursor-pointer group";
+                tr.onclick = () => openModal(item.id);
+
+                tr.innerHTML = `
+                    <td class="py-4 px-4 sm:px-6">
+                        <div class="flex items-start gap-3">
+                            <div class="w-2 h-2 rounded-full bg-ironeye-teal mt-2 shrink-0 group-hover:scale-150 transition-transform"></div>
+                            <div>
+                                <span class="font-bold text-slate-800 block text-sm group-hover:text-ironeye-teal transition-colors">
+                                    ${item.action}
+                                </span>
+                                <span class="text-xs text-slate-500 line-clamp-1 mt-0.5">
+                                    ${item.description}
+                                </span>
+                                <span class="inline-block bg-slate-100 text-slate-600 text-[10px] font-semibold px-2 py-0.5 rounded mt-1">
+                                    ${item.categoryLabel}
+                                </span>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="py-4 px-4 sm:px-6 text-xs text-slate-700 font-medium max-w-xs">
+                        ${item.indicator}
+                    </td>
+                    <td class="py-4 px-4 sm:px-6 text-xs">
+                        <span class="inline-flex items-center gap-1 font-semibold text-slate-700 bg-slate-100 px-2.5 py-1 rounded-lg">
+                            <i data-lucide="user" class="w-3 h-3 text-ironeye-teal"></i>
+                            ${item.responsible}
+                        </span>
+                    </td>
+                    <td class="py-4 px-4 sm:px-6 text-center text-xs text-slate-600 whitespace-nowrap font-medium">
+                        <span class="bg-amber-50 text-amber-800 border border-amber-200/60 px-2.5 py-1 rounded-md">
+                            ${item.when}
+                        </span>
+                    </td>
+                    <td class="py-4 px-4 sm:px-6 text-right font-bold text-ironeye-teal text-sm whitespace-nowrap">
+                        S/ ${item.cost.toLocaleString('es-PE', { minimumFractionDigits: 2 })}
+                    </td>
+                    <td class="py-4 px-4 sm:px-6 text-right">
+                        <div class="flex items-center justify-end gap-2">
+                            <span class="text-xs font-bold text-slate-700 w-10 text-right">${item.percentage.toFixed(1)}%</span>
+                            <div class="w-16 bg-slate-100 h-2 rounded-full overflow-hidden shrink-0">
+                                <div class="bg-ironeye-gold h-full rounded-full" style="width: ${item.percentage}%"></div>
+                            </div>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            lucide.createIcons();
+        }
+
+        function filterTable() {
+            const searchVal = document.getElementById('searchInput').value.toLowerCase();
+            const respVal = document.getElementById('filterResponsible').value;
+            const catVal = document.getElementById('filterCategory').value;
+
+            const filtered = actionData.filter(item => {
+                const matchesSearch = item.action.toLowerCase().includes(searchVal) || 
+                                      item.indicator.toLowerCase().includes(searchVal) ||
+                                      item.description.toLowerCase().includes(searchVal);
+                
+                const matchesResp = !respVal || item.responsible.includes(respVal);
+                const matchesCat = !catVal || item.category === catVal;
+
+                return matchesSearch && matchesResp && matchesCat;
+            });
+
+            renderTable(filtered);
+        }
+
+        function resetFilters() {
+            document.getElementById('searchInput').value = '';
+            document.getElementById('filterResponsible').value = '';
+            document.getElementById('filterCategory').value = '';
+            renderTable(actionData);
+        }
+
+        function initCharts() {
+            // Doughnut Chart
+            const ctxDoughnut = document.getElementById('budgetDoughnutChart').getContext('2d');
+            doughnutChart = new Chart(ctxDoughnut, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Hardware & Manufactura', 'Validación & Operaciones', 'Software & Cloud AI', 'Legales & Licitaciones', 'Marketing & B2G'],
+                    datasets: [{
+                        data: [4000, 2300, 1500, 1200, 1000],
+                        backgroundColor: ['#0B4F4A', '#136962', '#E5A00D', '#0284C7', '#8B5CF6'],
+                        borderWidth: 2,
+                        borderColor: '#FFFFFF'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return ` S/ ${context.parsed.toLocaleString('es-PE')} (${((context.parsed / 10000) * 100).toFixed(0)}%)`;
+                                }
+                            }
+                        }
+                    },
+                    cutout: '70%'
+                }
+            });
+
+            // Horizontal Bar Chart
+            const ctxBar = document.getElementById('budgetBarChart').getContext('2d');
+            barChart = new Chart(ctxBar, {
+                type: 'bar',
+                data: {
+                    labels: [
+                        'Hardware (Módulos)',
+                        'Operaciones / Piloto Puno',
+                        'Software / IA Cloud',
+                        'Legales / DIRESA',
+                        'Marketing B2G'
+                    ],
+                    datasets: [{
+                        label: 'Monto Asignado (S/.)',
+                        data: [4000, 2300, 1500, 1200, 1000],
+                        backgroundColor: '#0B4F4A',
+                        hoverBackgroundColor: '#E5A00D',
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: {
+                            grid: { color: '#F1F5F9' },
+                            ticks: {
+                                callback: function(value) { return 'S/ ' + value; },
+                                font: { family: 'Inter', size: 10 }
+                            }
+                        },
+                        y: {
+                            grid: { display: false },
+                            ticks: { font: { family: 'Inter', size: 11, weight: '500' } }
+                        }
+                    }
+                }
+            });
+        }
+
+        function openModal(id) {
+            const item = actionData.find(a => a.id === id);
+            if (!item) return;
+
+            document.getElementById('modalTitle').innerText = item.action;
+            document.getElementById('modalCategoryBadge').innerText = item.categoryLabel;
+            document.getElementById('modalDescription').innerText = item.description;
+            document.getElementById('modalIndicator').innerText = item.indicator;
+            document.getElementById('modalWhen').innerText = item.when;
+            document.getElementById('modalResponsible').innerText = item.responsible;
+            document.getElementById('modalCost').innerText = 'S/ ' + item.cost.toLocaleString('es-PE', { minimumFractionDigits: 2 });
+            document.getElementById('modalAlignment').innerText = item.alignment;
+
+            const modal = document.getElementById('actionModal');
+            const modalCard = document.getElementById('modalCard');
+            
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modalCard.classList.remove('scale-95', 'opacity-0');
+                modalCard.classList.add('scale-100', 'opacity-100');
+            }, 10);
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('actionModal');
+            const modalCard = document.getElementById('modalCard');
+            
+            modalCard.classList.remove('scale-100', 'opacity-100');
+            modalCard.classList.add('scale-95', 'opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 200);
+        }
+
+        // Close modal when clicking background overlay
+        document.getElementById('actionModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        window.onload = function() {
+            lucide.createIcons();
+            renderTable(actionData);
+            initCharts();
+        };
+    </script>
+</body>
+</html>

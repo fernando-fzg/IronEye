@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Plenaria 2 · IronEye</title>
+<meta name="description" content="Entregable Plenaria 2 de IronEye: presentación y plan de acción, indicadores y presupuesto.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@300;400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0A2540; --ink:#1B2B3A; --ink-2:#4A5B6C; --muted:#7A8A99;
+  --blue:#0B63CE; --blue-soft:#E8F1FC; --teal:#0E9F9A; --teal-soft:#E4F6F5;
+  --bg:#F5F8FB; --white:#FFFFFF; --line:#E2E9F0; --radius:16px;
+  --shadow:0 1px 2px rgba(10,37,64,.06),0 12px 32px -12px rgba(10,37,64,.18);
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:"IBM Plex Sans",system-ui,sans-serif;font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+p{margin:0}
+h1,h2,h3{margin:0;font-weight:600;line-height:1.15;letter-spacing:-.015em;color:var(--navy)}
+.wrap{max-width:1200px;margin:0 auto;padding:0 24px}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.76rem;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:var(--blue)}
+.eyebrow::before{content:"";width:8px;height:8px;border-radius:2px;background:var(--teal)}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 18px;border-radius:10px;font:inherit;font-weight:600;font-size:.9rem;border:1.5px solid transparent;cursor:pointer;transition:background .2s,transform .2s;white-space:nowrap}
+.btn:hover{transform:translateY(-1px)}
+.btn-primary{background:var(--blue);color:#fff;box-shadow:0 8px 20px -10px rgba(11,99,206,.8)}
+.btn-primary:hover{background:#0954B0}
+.btn-ghost{background:var(--white);color:var(--navy);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--blue);color:var(--blue)}
+
+.util{background:var(--navy);color:#C5D3E2;font-size:.78rem}
+.util .wrap{display:flex;justify-content:space-between;gap:16px;padding-top:8px;padding-bottom:8px;flex-wrap:wrap}
+.util b{color:#fff;font-weight:500}
+.nav{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.nav .wrap{display:flex;align-items:center;justify-content:space-between;height:70px;gap:16px}
+.logo{display:flex;align-items:center;gap:10px;font-weight:700;font-size:1.25rem;color:var(--navy)}
+.logo span b{color:var(--teal)}
+.logo small{display:block;font-family:var(--mono);font-size:.6rem;font-weight:500;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-top:-2px}
+.nav ul{display:flex;gap:26px;list-style:none;margin:0;padding:0;font-size:.92rem;font-weight:500}
+.nav ul a{color:var(--ink-2)}
+.nav ul a:hover{color:var(--blue)}
+.nav ul a.active{color:var(--blue);font-weight:600;box-shadow:inset 0 -2px 0 var(--blue);padding-bottom:4px}
+@media (max-width:1060px){.nav ul{display:none}}
+
+.head{background:linear-gradient(180deg,var(--white),var(--bg));border-bottom:1px solid var(--line);padding:34px 0 30px}
+.crumbs{font-size:.84rem;color:var(--muted);margin-bottom:18px}
+.crumbs a:hover{color:var(--blue)}
+.head .row{display:flex;justify-content:space-between;align-items:end;gap:24px;flex-wrap:wrap}
+.head h1{font-size:clamp(2rem,4vw,3rem);margin-top:12px}
+.meta{display:flex;gap:22px;flex-wrap:wrap;margin-top:14px;font-size:.88rem;color:var(--ink-2)}
+.meta b{font-family:var(--mono);font-weight:500;color:var(--navy)}
+.actions{display:flex;gap:10px;flex-wrap:wrap}
+
+section{padding:48px 0}
+.sec-title{display:flex;justify-content:space-between;align-items:end;gap:16px;flex-wrap:wrap;margin-bottom:20px}
+.sec-title h2{font-size:clamp(1.4rem,2.6vw,1.9rem);margin-top:8px}
+
+/* VISOR */
+.viewer{background:var(--white);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.stage{position:relative;background:#0F1B2A;aspect-ratio:16/9;display:grid;place-items:center}
+.stage canvas{max-width:100%;max-height:100%;display:block}
+.stage .loading{position:absolute;color:#B9C9DA;font-size:.9rem;font-family:var(--mono)}
+.arrow{position:absolute;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:50%;border:0;background:rgba(255,255,255,.92);color:var(--navy);display:grid;place-items:center;cursor:pointer;box-shadow:var(--shadow);transition:background .2s,opacity .2s}
+.arrow:hover{background:#fff}
+.arrow:disabled{opacity:.3;cursor:default}
+.arrow.prev{left:14px}.arrow.next{right:14px}
+.bar{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--line);flex-wrap:wrap}
+.count{font-family:var(--mono);font-size:.9rem;color:var(--navy)}
+.progress{flex:1;min-width:120px;height:4px;background:var(--line);border-radius:4px;overflow:hidden}
+.progress i{display:block;height:100%;background:linear-gradient(90deg,var(--blue),var(--teal));transition:width .3s}
+.thumbs{display:flex;gap:10px;overflow-x:auto;padding:14px 16px 18px;border-top:1px solid var(--line);background:#FAFCFE}
+.thumbs button{flex:none;width:132px;border:2px solid transparent;border-radius:8px;padding:0;background:none;cursor:pointer;position:relative;overflow:hidden}
+.thumbs button.on{border-color:var(--blue)}
+.thumbs canvas{width:100%;display:block;aspect-ratio:16/9;background:#E2E9F0}
+.thumbs span{position:absolute;left:4px;bottom:4px;font-family:var(--mono);font-size:.65rem;background:rgba(10,37,64,.8);color:#fff;padding:0 5px;border-radius:4px}
+.fallback{display:none}
+.fallback iframe{width:100%;aspect-ratio:16/10;border:0}
+.viewer:fullscreen{border-radius:0;display:flex;flex-direction:column;background:#0F1B2A}
+.viewer:fullscreen .stage{flex:1;aspect-ratio:auto}
+.viewer:fullscreen .thumbs{display:none}
+
+/* PLAN DE ACCIÓN */
+.plan{background:var(--white);border:1px solid var(--line);border-radius:22px;box-shadow:var(--shadow);overflow:hidden}
+.plan header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+.plan header .file{font-family:var(--mono);font-size:.82rem;color:var(--ink-2);display:flex;align-items:center;gap:8px}
+.plan iframe{display:block;width:100%;height:1700px;border:0;background:var(--bg)}
+
+footer{background:#061A2E;color:#93A8BD;padding:30px 0;font-size:.84rem;margin-top:30px}
+footer .wrap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a:hover{color:#fff}
+</style>
+</head>
+<body>
+
+<div class="util">
+  <div class="wrap">
+    <span><b>Dispositivo médico de tamizaje</b> · Uso exclusivo por personal de salud capacitado</span>
+    <span>Registro sanitario DIGEMID: en trámite</span>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="wrap">
+    <a href="index.html#top" class="logo" aria-label="IronEye inicio">
+      <svg width="34" height="34" viewBox="0 0 40 40" aria-hidden="true"><rect x="1" y="1" width="38" height="38" rx="10" fill="#0A2540"/><path d="M7 20c3.8-6 8.4-9 13-9s9.2 3 13 9c-3.8 6-8.4 9-13 9s-9.2-3-13-9z" fill="#fff"/><circle cx="20" cy="20" r="5" fill="#0E9F9A"/><path d="M20 16.6v6.8M16.6 20h6.8" stroke="#fff" stroke-width="1.6"/></svg>
+      <span>Iron<b>Eye</b><small>Medical · IA</small></span>
+    </a>
+    <ul>
+      <li><a href="index.html#dispositivo">Dispositivo</a></li>
+      <li><a href="index.html#servicios">Servicios</a></li>
+      <li><a href="index.html#como">Cómo funciona</a></li>
+      <li><a href="index.html#propuesta">Propuesta de valor</a></li>
+      <li><a href="index.html#ahorro">Ahorro</a></li>
+      <li><a href="index.html#recursos">Recursos</a></li>
+      <li><a href="index.html#entregables" class="active">Entregables</a></li>
+    </ul>
+    <a href="index.html#contacto" class="btn btn-primary">Solicitar demo</a>
+  </div>
+</nav>
+
+<header class="head">
+  <div class="wrap">
+    <div class="crumbs"><a href="index.html#top">Inicio</a> / <a href="index.html#entregables">Entregables</a> / Plenaria 2</div>
+    <div class="row">
+      <div>
+        <span class="eyebrow">Entregable · Plenaria 2</span>
+        <h1>Plenaria 2 — IronEye</h1>
+        <div class="meta">
+          <span>Fecha: <b>9 oct 2026</b></span>
+          <span>Grupo: <b>10</b></span>
+          <span>Diapositivas: <b>10</b></span>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn btn-ghost" id="fsBtn" type="button">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>Pantalla completa</button>
+        <a class="btn btn-primary" href="plenaria2.pdf" download>
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 4v11M7 10l5 5 5-5M5 20h14"/></svg>Descargar PDF</a>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- PRESENTACIÓN -->
+<section>
+  <div class="wrap">
+    <div class="sec-title">
+      <div><span class="eyebrow">Presentación</span><h2>Diapositivas de la plenaria</h2></div>
+      <span style="font-size:.84rem;color:var(--muted)">Usa las flechas del teclado o haz clic en las miniaturas</span>
+    </div>
+    <div class="viewer" id="viewer">
+      <div class="stage">
+        <span class="loading" id="loading">Cargando presentación…</span>
+        <canvas id="slide" aria-label="Diapositiva de la Plenaria 2"></canvas>
+        <button class="arrow prev" id="prev" type="button" aria-label="Diapositiva anterior"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M15 6l-6 6 6 6"/></svg></button>
+        <button class="arrow next" id="next" type="button" aria-label="Diapositiva siguiente"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M9 6l6 6-6 6"/></svg></button>
+      </div>
+      <div class="bar">
+        <span class="count" id="count">– / –</span>
+        <div class="progress"><i id="prog" style="width:0"></i></div>
+      </div>
+      <div class="thumbs" id="thumbs"></div>
+      <div class="fallback" id="fallback"><iframe src="plenaria2.pdf" title="Plenaria 2 (PDF)"></iframe></div>
+    </div>
+  </div>
+</section>
+
+<!-- PLAN DE ACCIÓN -->
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-title">
+      <div><span class="eyebrow">Anexo interactivo</span><h2>Plan de acción, indicadores y presupuesto</h2></div>
+    </div>
+    <div class="plan">
+      <header>
+        <span class="file"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#0B63CE" stroke-width="2" stroke-linecap="round"><path d="M8 6l-6 6 6 6M16 6l6 6-6 6"/></svg>ironeye_plan_de_acci_n_y_presupuesto.html</span>
+        <a class="btn btn-ghost" href="plan_de_accion.html" target="_blank" rel="noopener">Abrir en pestaña nueva ↗</a>
+      </header>
+      <iframe id="planFrame" src="plan_de_accion.html" title="Plan de acción, indicadores y presupuesto de IronEye" loading="lazy"></iframe>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <span>© 2026 IronEye · Grupo 10 · Modelos de Negocio en Bioingeniería</span>
+    <a href="index.html#entregables">← Volver a Entregables</a>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script>
+const PDF_URL='plenaria2.pdf';
+const $=id=>document.getElementById(id);
+let pdf=null,page=1,rendering=false,pending=null;
+
+function showFallback(){ // si PDF.js no puede leer el archivo (p. ej. abierto como archivo local)
+  document.querySelector('.stage').style.display='none';
+  document.querySelector('.bar').style.display='none';
+  $('thumbs').style.display='none';
+  $('fallback').style.display='block';
+}
+
+async function render(n){
+  if(rendering){pending=n;return}
+  rendering=true;
+  const p=await pdf.getPage(n);
+  const stage=document.querySelector('.stage');
+  const v1=p.getViewport({scale:1});
+  const scale=Math.min(stage.clientWidth/v1.width,stage.clientHeight/v1.height)*(window.devicePixelRatio||1);
+  const vp=p.getViewport({scale});
+  const c=$('slide');c.width=vp.width;c.height=vp.height;
+  c.style.width=(vp.width/(window.devicePixelRatio||1))+'px';
+  await p.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;
+  rendering=false;$('loading').style.display='none';
+  $('count').textContent=n+' / '+pdf.numPages;
+  $('prog').style.width=(n/pdf.numPages*100)+'%';
+  $('prev').disabled=n<=1;$('next').disabled=n>=pdf.numPages;
+  document.querySelectorAll('.thumbs button').forEach((b,i)=>b.classList.toggle('on',i+1===n));
+  const t=document.querySelector('.thumbs button.on'); if(t) t.scrollIntoView({block:'nearest',inline:'nearest'});
+  if(pending!==null){const q=pending;pending=null;render(q)}
+}
+function go(n){if(!pdf||n<1||n>pdf.numPages)return;page=n;render(page)}
+
+async function thumbs(){
+  for(let i=1;i<=pdf.numPages;i++){
+    const b=document.createElement('button');b.type='button';b.setAttribute('aria-label','Ir a la diapositiva '+i);
+    const c=document.createElement('canvas');b.append(c);
+    const s=document.createElement('span');s.textContent=i;b.append(s);
+    b.onclick=()=>go(i);$('thumbs').append(b);
+    const p=await pdf.getPage(i);const v1=p.getViewport({scale:1});const vp=p.getViewport({scale:264/v1.width});
+    c.width=vp.width;c.height=vp.height;await p.render({canvasContext:c.getContext('2d'),viewport:vp}).promise;
+  }
+}
+
+(async()=>{
+  try{
+    pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+    pdf=await pdfjsLib.getDocument(PDF_URL).promise;
+    await render(1);
+    thumbs();
+  }catch(e){showFallback()}
+})();
+
+$('prev').onclick=()=>go(page-1);
+$('next').onclick=()=>go(page+1);
+addEventListener('keydown',e=>{if(e.key==='ArrowRight')go(page+1);if(e.key==='ArrowLeft')go(page-1)});
+let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(()=>pdf&&render(page),200)});
+document.addEventListener('fullscreenchange',()=>setTimeout(()=>pdf&&render(page),100));
+$('fsBtn').onclick=()=>{const v=$('viewer');document.fullscreenElement?document.exitFullscreen():v.requestFullscreen&&v.requestFullscreen()};
+
+// Ajusta la altura del plan de acción a su contenido (mismo origen)
+$('planFrame').addEventListener('load',()=>{
+  const f=$('planFrame');
+  const fit=()=>{try{const h=f.contentDocument.documentElement.scrollHeight;if(h>200)f.style.height=h+'px'}catch(e){}};
+  fit();setTimeout(fit,800);setTimeout(fit,2000);
+});
+</script>
+</body>
+</html>
