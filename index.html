@@ -332,6 +332,15 @@ footer .logo{color:#fff;margin-bottom:10px}
 .m.u{background:var(--blue);color:#fff;justify-self:end}
 .qr{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 16px}
 .qr button{font:inherit;font-size:.78rem;font-weight:600;border:1px solid var(--blue);color:var(--blue);background:transparent;border-radius:999px;padding:6px 10px;cursor:pointer}
+.bw-id{display:flex;align-items:center;gap:10px}
+.bw-av{width:36px;height:36px;border-radius:50%;background:var(--yellow);display:grid;place-items:center;font-size:1.1rem}
+.bw-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#4ADE80;margin-right:6px;vertical-align:middle}
+.bw-in{display:flex;gap:8px;padding:0 16px 12px}
+.bw-in input{flex:1;font:inherit;font-size:.88rem;padding:10px 12px;border:1px solid var(--line);border-radius:10px;background:var(--bg);color:var(--ink);min-width:0}
+.bw-in input:focus{outline:none;border-color:var(--blue)}
+.bw-in button{width:40px;border:0;border-radius:10px;background:var(--blue);display:grid;place-items:center;cursor:pointer}
+.tg-btn{display:flex;align-items:center;justify-content:center;gap:8px;margin:0 16px 16px;padding:11px;border-radius:10px;background:#229ED9;color:#fff;font-weight:600;font-size:.9rem}
+.tg-btn:hover{background:#1C8BC0}
 @media (max-width:600px){.bot .t{display:none}.bot{padding:9px}}
 
 .reveal{opacity:0;transform:translateY(16px);transition:opacity .6s ease,transform .6s ease}
@@ -765,9 +774,20 @@ footer .logo{color:#fff;margin-bottom:10px}
 
 <!-- Asistente IA + WhatsApp -->
 <div class="botwin" id="botwin" role="dialog" aria-label="Asistente IronEye">
-  <header><div><b>Asistente IronEye</b><small>IA · español · quechua · aymara</small></div><button onclick="toggleBot()" style="background:none;border:0;color:#fff;font-size:1.3rem;cursor:pointer" aria-label="Cerrar">×</button></header>
-  <div class="msgs" id="msgs"><div class="m b">Hola, soy el asistente de IronEye. ¿En qué puedo ayudarte?</div></div>
+  <header>
+    <div class="bw-id"><span class="bw-av">🦒</span><div><b>Asistente IronEye</b><small><i class="bw-dot"></i>IA en Telegram · @IronEbot</small></div></div>
+    <button onclick="toggleBot()" style="background:none;border:0;color:#fff;font-size:1.3rem;cursor:pointer" aria-label="Cerrar">×</button>
+  </header>
+  <div class="msgs" id="msgs"><div class="m b">¡Hola! Soy el asistente de IronEye 🦒 Respondo con IA sobre el dispositivo, el tamizaje y cómo agendar una demo. Elige una pregunta rápida o escríbeme.</div></div>
   <div class="qr"><button onclick="ask(0)">¿Duele?</button><button onclick="ask(1)">Precio</button><button onclick="ask(2)">Agendar demo</button></div>
+  <form class="bw-in" id="bwForm" autocomplete="off">
+    <input id="bwText" placeholder="Escribe tu pregunta…" aria-label="Escribe tu pregunta">
+    <button type="submit" aria-label="Enviar"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4z"/></svg></button>
+  </form>
+  <a class="tg-btn" href="https://t.me/IronEbot" target="_blank" rel="noopener">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M21.9 4.3L18.7 19.4c-.2 1.1-.9 1.3-1.8.8l-4.9-3.6-2.4 2.3c-.3.3-.5.5-1 .5l.4-5 9.1-8.2c.4-.4-.1-.6-.6-.2L6.3 13.1l-4.8-1.5c-1-.3-1.1-1 .2-1.5L20.5 2.8c.9-.3 1.6.2 1.4 1.5z"/></svg>
+    Chatear con IA en Telegram
+  </a>
 </div>
 <button class="bot" onclick="toggleBot()"><span class="dot"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></span><span class="t">¿Dudas? Asistente IA</span></button>
 <a class="wa" href="#contacto" aria-label="WhatsApp"><svg width="28" height="28" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 00-8.6 15.1L2 22l5-1.3A10 10 0 1012 2zm5.2 13.8c-.2.6-1.3 1.2-1.8 1.2-.5.1-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.1-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.7-.1l.9-1.1c.2-.3.4-.2.7-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg></a>
@@ -819,12 +839,23 @@ new IntersectionObserver((es,o)=>{if(es[0].isIntersecting){setTimeout(resync,700
 // Formulario (boceto: no envía datos)
 $('demoForm').addEventListener('submit',e=>{e.preventDefault();$('okMsg').style.display='block'});
 
-// Asistente IA (simulado)
-function toggleBot(){$('botwin').classList.toggle('open')}
+// Asistente IA: respuestas rápidas en la web y conversación con IA en Telegram (@IronEbot)
+const TG_BOT='https://t.me/IronEbot';
+function toggleBot(){$('botwin').classList.toggle('open');if($('botwin').classList.contains('open'))$('bwText').focus()}
+function esc(t){const d=document.createElement('div');d.textContent=t;return d.innerHTML}
+$('bwForm').addEventListener('submit',e=>{
+  e.preventDefault();
+  const t=$('bwText').value.trim(); if(!t) return;
+  const m=$('msgs');
+  m.insertAdjacentHTML('beforeend','<div class="m u">'+esc(t)+'</div><div class="m b">Te respondo con IA en Telegram 🤖 Copié tu pregunta: solo pégala en el chat de @IronEbot.</div>');
+  m.scrollTop=m.scrollHeight; $('bwText').value='';
+  try{navigator.clipboard&&navigator.clipboard.writeText(t)}catch(err){}
+  window.open(TG_BOT,'_blank','noopener');
+});
 const QA=[
   ['¿Le duele al niño?','No. IronEye solo toma una fotografía del párpado inferior con luz suave. Sin agujas ni sangre.'],
   ['¿Cuánto cuesta?','El módulo cuesta S/ 700 e incluye calibración y 12 meses de garantía. El servicio en la nube se cotiza según tu red.'],
-  ['Quiero agendar una demo','Completa el formulario de contacto o escríbenos por WhatsApp y coordinamos una visita a tu establecimiento.']
+  ['Quiero agendar una demo','Completa el formulario de contacto o escríbele a nuestro asistente @IronEbot en Telegram y coordinamos una visita a tu establecimiento.']
 ];
 function ask(i){const m=$('msgs');m.insertAdjacentHTML('beforeend','<div class="m u">'+QA[i][0]+'</div><div class="m b">'+QA[i][1]+'</div>');m.scrollTop=m.scrollHeight}
 </script>
