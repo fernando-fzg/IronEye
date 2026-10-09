@@ -578,11 +578,13 @@ footer .logo{color:#fff;margin-bottom:10px}
           <input type="range" id="reps" min="1" max="4" step="1" value="1"></div>
         <div class="ctl"><div class="row"><label for="sub">Suscripción anual por IPRESS</label><output id="subV">S/ 300</output></div>
           <input type="range" id="sub" min="0" max="1500" step="50" value="300"><p class="hint">Valor referencial: ajústalo a la cotización vigente</p></div>
+        <div class="ctl"><div class="row"><label for="hemo">Costo del equipo HemoCue (método tradicional)</label><output id="hemoV">S/ 2,500</output></div>
+          <input type="range" id="hemo" min="0" max="6000" step="100" value="2500"><p class="hint">Estandarizado: un HemoCue por cada unidad IronEye · <span id="hemoTotal">100 equipos</span>. Valor referencial; usa S/ 0 si la IPRESS ya cuenta con el equipo</p></div>
       </div>
       <div class="results" aria-live="polite">
         <div class="big"><small>Ahorro neto · primer año</small><strong id="net1">S/ 40,000</strong><span id="net1txt">Ya descontada la compra de los dispositivos y la suscripción</span></div>
         <div class="bars">
-          <div class="bar-row"><div class="t"><span>Método tradicional · 5 años</span><b id="old5">S/ 700,000</b></div><div class="track"><i class="old" id="oldBar" style="width:100%"></i></div></div>
+          <div class="bar-row"><div class="t"><span>HemoCue + consumibles · 5 años</span><b id="old5">S/ 700,000</b></div><div class="track"><i class="old" id="oldBar" style="width:100%"></i></div></div>
           <div class="bar-row"><div class="t"><span>IronEye · 5 años</span><b id="new5">S/ 220,000</b></div><div class="track"><i class="new" id="newBar" style="width:31%"></i></div></div>
         </div>
         <div class="kpis3">
@@ -592,7 +594,7 @@ footer .logo{color:#fff;margin-bottom:10px}
         </div>
       </div>
     </div>
-    <p class="calc-note">Supuestos: método tradicional = S/ 1,000 en consumibles por cada 100 pruebas (S/ 10 por prueba). IronEye = S/ 700 por unidad × unidades por IPRESS × cantidad de IPRESS (pago único, año 1) + suscripción anual por establecimiento. No incluye el smartphone, que aporta la IPRESS, ni costos de personal, comunes a ambos métodos.</p>
+    <p class="calc-note">Supuestos: método tradicional = equipo HemoCue (un equipo por cada unidad IronEye, pago único en el año 1) + S/ 1,000 en consumibles por cada 100 pruebas (S/ 10 por prueba). IronEye = S/ 700 por unidad × unidades por IPRESS × cantidad de IPRESS (pago único, año 1) + suscripción anual por establecimiento. No incluye el smartphone, que aporta la IPRESS, ni costos de personal, comunes a ambos métodos.</p>
   </div>
 </section>
 
@@ -781,27 +783,31 @@ const COST_TEST=10;   // S/ 1,000 por cada 100 pruebas con el método tradiciona
 const $=id=>document.getElementById(id);
 const fmt=n=>'S/ '+Math.round(n).toLocaleString('es-PE');
 const signed=n=>(n<0?'− ':'')+fmt(Math.abs(n));
-const SLIDERS=['ipress','units','kids','reps','sub'];
+const SLIDERS=['ipress','units','kids','reps','sub','hemo'];
 function fill(r){r.style.setProperty('--p',((r.value-r.min)/(r.max-r.min)*100)+'%')}
 function calc(){
-  const n=+$('ipress').value,u=+$('units').value,k=+$('kids').value,r=+$('reps').value,s=+$('sub').value;
+  const n=+$('ipress').value,u=+$('units').value,k=+$('kids').value,r=+$('reps').value,s=+$('sub').value,h=+$('hemo').value;
   SLIDERS.forEach(id=>fill($(id)));
-  $('ipressV').textContent=n;$('unitsV').textContent=u;$('kidsV').textContent=k;$('repsV').textContent=r;$('subV').textContent=fmt(s);
-  $('unitsTotal').textContent=(n*u).toLocaleString('es-PE')+(n*u===1?' unidad en total':' unidades en total');
+  $('ipressV').textContent=n;$('unitsV').textContent=u;$('kidsV').textContent=k;$('repsV').textContent=r;$('subV').textContent=fmt(s);$('hemoV').textContent=fmt(h);
+  const units=n*u;
+  $('unitsTotal').textContent=units.toLocaleString('es-PE')+(units===1?' unidad en total':' unidades en total');
+  $('hemoTotal').textContent=units.toLocaleString('es-PE')+(units===1?' equipo':' equipos')+' = '+fmt(units*h);
   const tests=n*k*r;                       // pruebas por año
   const oldYear=tests*COST_TEST;           // consumibles del método tradicional por año
-  const invest=n*u*PRICE,subYear=n*s;      // inversión inicial (todas las unidades) y suscripción anual
-  const net1=oldYear-(invest+subYear);
-  const old5=oldYear*5,new5=invest+subYear*5,net5=old5-new5;
+  const oldInvest=units*h;                 // equipos HemoCue (mismo número de equipos que IronEye)
+  const invest=units*PRICE,subYear=n*s;    // inversión inicial (todas las unidades) y suscripción anual
+  const net1=(oldInvest+oldYear)-(invest+subYear);
+  const old5=oldInvest+oldYear*5,new5=invest+subYear*5,net5=old5-new5;
   const monthly=(oldYear-subYear)/12;      // ahorro mensual neto de suscripción
+  const gap=invest-oldInvest;              // inversión extra de IronEye frente al HemoCue
   $('net1').textContent=signed(net1);
   $('net1').style.color=net1<0?'#FFB4A3':'';
-  $('net1txt').textContent=net1<0?'En el primer año la inversión aún no se recupera; revisa el ahorro a 5 años':'Ya descontada la compra de los dispositivos y la suscripción';
+  $('net1txt').textContent=net1<0?'En el primer año la inversión aún no se recupera; revisa el ahorro a 5 años':'Frente a HemoCue + consumibles, ya descontados los equipos IronEye y la suscripción';
   $('old5').textContent=fmt(old5);$('new5').textContent=fmt(new5);
   const max=Math.max(old5,new5)||1;
   $('oldBar').style.width=(old5/max*100)+'%';$('newBar').style.width=(new5/max*100)+'%';
   $('net5').textContent=signed(net5);
-  $('payback').textContent=monthly>0?(invest/monthly).toFixed(1).replace('.0','')+' meses':'No aplica';
+  $('payback').textContent=gap<=0?'Inmediata':monthly>0?(gap/monthly).toFixed(1).replace('.0','')+' meses':'No aplica';
   $('pricks').textContent=tests.toLocaleString('es-PE');
 }
 SLIDERS.forEach(id=>$(id).addEventListener('input',calc));calc();
